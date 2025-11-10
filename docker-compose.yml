@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: treff-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: treff_v2
+      MYSQL_USER: treff_user
+      MYSQL_PASSWORD: treff_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - treff-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: treff-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - treff-network
+
+  # Uncomment to add a local SMTP server for email testing
+  # mailhog:
+  #   image: mailhog/mailhog
+  #   container_name: treff-mailhog
+  #   ports:
+  #     - "1025:1025"  # SMTP port
+  #     - "8025:8025"  # Web interface
+  #   networks:
+  #     - treff-network
+
+volumes:
+  mysql_data:
+
+networks:
+  treff-network:
+    driver: bridge

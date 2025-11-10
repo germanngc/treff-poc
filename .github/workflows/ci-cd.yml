@@ -1,0 +1,316 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  NODE_VERSION: '20'
+  DOTNET_VERSION: '9.0.x'
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.changes.outputs.backend }}
+      frontend: ${{ steps.changes.outputs.frontend }}
+      icp: ${{ steps.changes.outputs.icp }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            backend:
+              - 'apps/backend/**'
+              - 'shared/**'
+            frontend:
+              - 'apps/frontend/**'
+              - 'shared/**'
+              - 'packages/**'
+            icp:
+              - 'apps/icp/**'
+              - 'shared/**'
+
+  backend:
+    needs: changes
+    if: ${{ needs.changes.outputs.backend == 'true' }}
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: ./apps/backend
+    
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+      working-directory: ./apps/backend
+    
+    - name: Test
+      run: dotnet test --no-build --configuration Release --verbosity normal
+      working-directory: ./apps/backend
+
+  frontend:
+    needs: changes
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Build frontend
+      run: npm run build --workspace=apps/frontend
+    
+    - name: Test frontend
+      run: npm run test --workspace=apps/frontend
+      env:
+        CI: true
+
+  icp:
+    needs: changes
+    if: ${{ needs.changes.outputs.icp == 'true' }}
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+    
+    - name: Install DFX
+      run: |
+        curl -fsSL https://internetcomputer.org/install.sh | sh
+        echo "$HOME/.local/share/dfx/bin" >> $GITHUB_PATH
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Build ICP
+      run: |
+        dfx start --background --clean
+        npm run build --workspace=apps/icp
+      working-directory: ./apps/icp
+
+  deploy-infrastructure:
+    needs: changes
+    if: |
+      github.ref == 'refs/heads/main' && 
+      github.event_name == 'push' &&
+      (needs.changes.outputs.backend == 'true' || needs.changes.outputs.frontend == 'true')
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      id-token: write   # Required for OIDC
+      contents: read    # Required to checkout code
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: infrastructure/package-lock.json
+    
+    - name: Configure AWS credentials (OIDC)
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+        aws-region: ${{ vars.AWS_REGION }}
+        role-session-name: GitHubActions-Infrastructure
+    
+    - name: Install CDK dependencies
+      working-directory: ./infrastructure
+      run: npm ci
+    
+    - name: CDK Diff
+      working-directory: ./infrastructure
+      run: npm run diff
+      env:
+        MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+        MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+        FRONTEND_BUCKET_NAME: ${{ vars.FRONTEND_BUCKET_NAME }}
+        ASSETS_BUCKET_NAME: ${{ vars.ASSETS_BUCKET_NAME }}
+    
+    - name: CDK Deploy
+      working-directory: ./infrastructure
+      run: npm run deploy -- --require-approval never
+      env:
+        MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+        MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+        FRONTEND_BUCKET_NAME: ${{ vars.FRONTEND_BUCKET_NAME }}
+        ASSETS_BUCKET_NAME: ${{ vars.ASSETS_BUCKET_NAME }}
+    
+    outputs:
+      ec2_ip: ${{ steps.cdk-outputs.outputs.ec2_ip }}
+      bucket_name: ${{ steps.cdk-outputs.outputs.bucket_name }}
+      distribution_id: ${{ steps.cdk-outputs.outputs.distribution_id }}
+
+  deploy-backend:
+    needs: [backend, deploy-infrastructure]
+    if: |
+      github.ref == 'refs/heads/main' && 
+      github.event_name == 'push' &&
+      needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      id-token: write
+      contents: read
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Build and Publish Backend
+      working-directory: ./apps/backend/WebApi
+      run: |
+        dotnet publish -c Release -o ./publish
+        cd publish
+        tar -czf backend.tar.gz *
+    
+    - name: Configure AWS credentials (OIDC)
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+        aws-region: ${{ vars.AWS_REGION }}
+        role-session-name: GitHubActions-Backend
+    
+    - name: Get EC2 Instance ID
+      id: get-instance
+      run: |
+        INSTANCE_ID=$(aws ec2 describe-instances \
+          --filters "Name=tag:Name,Values=TreffInfrastructureStack/TreffEC2Instance" \
+          --query "Reservations[0].Instances[0].InstanceId" \
+          --output text)
+        echo "instance_id=$INSTANCE_ID" >> $GITHUB_OUTPUT
+    
+    - name: Upload Backend to S3 (temporary storage)
+      working-directory: ./apps/backend/WebApi/publish
+      run: |
+        aws s3 cp backend.tar.gz s3://${{ vars.DEPLOYMENT_BUCKET_NAME }}/backend.tar.gz
+    
+    - name: Deploy Backend to EC2 via SSM
+      run: |
+        aws ssm send-command \
+          --instance-ids ${{ steps.get-instance.outputs.instance_id }} \
+          --document-name "AWS-RunShellScript" \
+          --parameters 'commands=[
+            "aws s3 cp s3://${{ vars.DEPLOYMENT_BUCKET_NAME }}/backend.tar.gz /tmp/backend.tar.gz",
+            "sudo systemctl stop treff-backend || true",
+            "sudo rm -rf /var/www/treff-backend/*",
+            "sudo tar -xzf /tmp/backend.tar.gz -C /var/www/treff-backend/",
+            "sudo chown -R www-data:www-data /var/www/treff-backend/",
+            "sudo systemctl enable treff-backend",
+            "sudo systemctl start treff-backend",
+            "rm /tmp/backend.tar.gz"
+          ]' \
+          --output text
+
+  deploy-frontend:
+    needs: [frontend, deploy-infrastructure]
+    if: |
+      github.ref == 'refs/heads/main' && 
+      github.event_name == 'push' &&
+      needs.changes.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      id-token: write
+      contents: read
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Build Frontend
+      working-directory: ./apps/frontend
+      run: npm run build
+      env:
+        REACT_APP_API_URL: ${{ vars.BACKEND_API_URL }}
+        REACT_APP_SIGNALR_URL: ${{ vars.BACKEND_API_URL }}
+    
+    - name: Configure AWS credentials (OIDC)
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+        aws-region: ${{ vars.AWS_REGION }}
+        role-session-name: GitHubActions-Frontend
+    
+    - name: Deploy to S3
+      working-directory: ./apps/frontend/build
+      run: |
+        aws s3 sync . s3://${{ vars.FRONTEND_BUCKET_NAME }}/ --delete
+    
+    - name: Invalidate CloudFront Cache
+      run: |
+        aws cloudfront create-invalidation \
+          --distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }} \
+          --paths "/*"
+  
+  deploy-icp:
+    needs: [icp]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && needs.changes.outputs.icp == 'true'
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+    
+    - name: Install DFX
+      run: |
+        curl -fsSL https://internetcomputer.org/install.sh | sh
+        echo "$HOME/.local/share/dfx/bin" >> $GITHUB_PATH
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Deploy ICP to Mainnet
+      working-directory: ./apps/icp
+      run: |
+        echo "${{ secrets.DFX_IDENTITY }}" > identity.pem
+        dfx identity import github-actions identity.pem
+        dfx identity use github-actions
+        dfx deploy --network ic
+      env:
+        DFX_IDENTITY: ${{ secrets.DFX_IDENTITY }}

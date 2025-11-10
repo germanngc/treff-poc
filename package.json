@@ -1,0 +1,42 @@
+{
+  "name": "treff-monorepo",
+  "version": "1.0.0",
+  "description": "Treff Platform - Mono-repository for Backend, Frontend, and ICP applications",
+  "private": true,
+  "workspaces": [
+    "apps/frontend",
+    "apps/icp",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\" \"npm run dev:icp\"",
+    "dev:frontend": "npm run start --workspace=apps/frontend",
+    "dev:backend": "cd apps/backend/WebApi && dotnet run",
+    "dev:icp": "cd apps/icp && npm run start",
+    "build": "npm run build --workspaces --if-present && npm run build:backend",
+    "build:frontend": "npm run build --workspace=apps/frontend",
+    "build:backend": "cd apps/backend && dotnet build",
+    "build:icp": "cd apps/icp && npm run build",
+    "test": "npm run test --workspaces --if-present && npm run test:backend",
+    "test:backend": "cd apps/backend && dotnet test",
+    "clean": "npm run clean --workspaces --if-present && npm run clean:backend",
+    "clean:backend": "cd apps/backend && dotnet clean",
+    "setup": "npm install && npm run setup:icp",
+    "setup:icp": "cd apps/icp && npm run setup",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "lerna": "^8.1.8",
+    "rimraf": "^6.0.1"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0"
+  },
+  "keywords": ["monorepo", "react", "dotnet", "icp", "internet-computer"],
+  "author": "Treff Team",
+  "license": "MIT"
+}

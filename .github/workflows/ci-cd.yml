@@ -27,16 +27,13 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     
     - name: Restore dependencies
-      run: dotnet restore TreffServices.sln
-      working-directory: ./apps/backend
+      run: dotnet restore apps/backend/TreffServices.sln
     
     - name: Build
-      run: dotnet build TreffServices.sln --no-restore --configuration Release
-      working-directory: ./apps/backend
+      run: dotnet build apps/backend/TreffServices.sln --no-restore --configuration Release
     
     - name: Test
-      run: dotnet test TreffServices.sln --no-build --configuration Release --verbosity normal
-      working-directory: ./apps/backend
+      run: dotnet test apps/backend/TreffServices.sln --no-build --configuration Release --verbosity normal
 
   frontend:
     runs-on: ubuntu-latest

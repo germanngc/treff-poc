@@ -1,5 +1,7 @@
-actor persistent {
+actor {
+  stable var greeting : Text = "Hello";
+
   public query func greet(name : Text) : async Text {
-    return "Hello, " # name # "!";
+    return greeting # ", " # name # "!";
   };
 };

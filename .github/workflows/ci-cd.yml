@@ -15,6 +15,7 @@ env:
   DOTNET_VERSION: '9.0.x'
 
 jobs:
+  # Build jobs - run in parallel
   backend:
     runs-on: ubuntu-latest
     
@@ -85,7 +86,9 @@ jobs:
         dfx start --background --clean
         npm run build
 
+  # Deploy infrastructure only after all builds pass
   deploy-infrastructure:
+    needs: [backend, frontend, icp]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     environment: production

@@ -31,11 +31,11 @@ jobs:
       working-directory: ./apps/backend
     
     - name: Build
-      run: dotnet build --no-restore --configuration Release
+      run: dotnet build TreffServices.sln --no-restore --configuration Release
       working-directory: ./apps/backend
     
     - name: Test
-      run: dotnet test --no-build --configuration Release --verbosity normal
+      run: dotnet test TreffServices.sln --no-build --configuration Release --verbosity normal
       working-directory: ./apps/backend
 
   frontend:

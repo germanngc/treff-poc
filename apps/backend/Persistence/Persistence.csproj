@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Migrations\treff_v2\20230202165915_AddChatMessages.cs" />
+    <Compile Remove="Migrations\treff_v2\20230202165915_AddChatMessages.Designer.cs" />
+    <Compile Remove="Migrations\treff_v2\20230202201705_AddChat.cs" />
+    <Compile Remove="Migrations\treff_v2\20230202201705_AddChat.Designer.cs" />
+    <Compile Remove="Migrations\treff_v2\20230202202051_AddChatTable.cs" />
+    <Compile Remove="Migrations\treff_v2\20230202202051_AddChatTable.Designer.cs" />
+    <Compile Remove="Migrations\treff_v2\20230202202732_AddChatTable1.cs" />
+    <Compile Remove="Migrations\treff_v2\20230202202732_AddChatTable1.Designer.cs" />
+    <Compile Remove="Migrations\treff_v2\20230202203754_AddChatTableUsers.cs" />
+    <Compile Remove="Migrations\treff_v2\20230202203754_AddChatTableUsers.Designer.cs" />
+    <Compile Remove="Migrations\treff_v2\20230311185547_AddNotifications.cs" />
+    <Compile Remove="Migrations\treff_v2\20230311185547_AddNotifications.Designer.cs" />
+    <Compile Remove="Migrations\treff_v2\20230311191104_AddNotificationsRead.cs" />
+    <Compile Remove="Migrations\treff_v2\20230311191104_AddNotificationsRead.Designer.cs" />
+    <Compile Remove="Migrations\treff_v2\20230311191727_AddNotificationsClient.cs" />
+    <Compile Remove="Migrations\treff_v2\20230311191727_AddNotificationsClient.Designer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.18.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="MySql.EntityFrameworkCore" Version="7.0.5" />
+    <PackageReference Include="Twilio" Version="6.2.1" />
+    <PackageReference Include="System.Security.Permissions" Version="7.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Application\Application.csproj" />
+  </ItemGroup>
+</Project>

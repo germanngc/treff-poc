@@ -1,0 +1,23 @@
+# Ignore build outputs
+**/bin/
+**/obj/
+**/publish/
+
+# Ignore IDE files
+**/.vs/
+**/.vscode/
+**/.idea/
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore sensitive files
+**/*.user
+**/*.suo
+**/appsettings.Development.json
+**/appsettings.*.json
+!**/appsettings.Production.json
+
+# Ignore test results
+**/TestResults/

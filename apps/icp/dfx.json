@@ -1,0 +1,40 @@
+{
+  "canisters": {
+    "internet_identity": {
+      "candid": "src/canisters/internet_identity.did",
+      "frontend": {},
+      "remote": {
+        "id": {
+          "ic": "bkyz2-fmaaa-aaaaa-qaaaq-cai"
+        }
+      },
+      "type": "custom",
+      "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm.gz"
+    },
+    "treff-icp-backend": {
+      "main": "src/treff-icp-backend/main.mo",
+      "type": "motoko"
+    },
+    "treff-icp-frontend": {
+      "dependencies": [
+        "treff-icp-backend"
+      ],
+      "source": [
+        "src/treff-icp-frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "treff-icp-frontend",
+      "headers": {
+        "Content-Security-Policy": "default-src 'self'; connect-src 'self' https://treff-backend.azurewebsites.net http://localhost:*; script-src 'self'; img-src 'self' data:; style-src * 'unsafe-inline'; font-src *; object-src 'none'; base-uri 'self'; frame-ancestors 'none';"
+      }
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}

@@ -1,0 +1,58 @@
+{
+  "name": "@treff/icp",
+  "version": "0.1.0",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0"
+  },
+  "scripts": {
+    "setup": "npm install && cd src/treff-icp-frontend && npm install && dfx canister create treff-icp-backend && dfx generate treff-icp-backend && dfx deploy",
+    "start": "cd src/treff-icp-frontend && npm run start",
+    "build": "cd src/treff-icp-frontend && npm run build",
+    "prebuild": "cd src/treff-icp-frontend && npm run prebuild",
+    "test": "echo \"No tests configured for ICP\""
+  },
+  "type": "module",
+  "dependencies": {
+    "@dfinity/auth-client": "^2.1.3",
+    "@emotion/react": "^11.13.5",
+    "@emotion/styled": "^11.13.5",
+    "@fortawesome/fontawesome-svg-core": "^6.7.1",
+    "@fortawesome/free-brands-svg-icons": "^6.7.1",
+    "@fortawesome/free-regular-svg-icons": "^6.7.1",
+    "@fortawesome/free-solid-svg-icons": "^6.7.1",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@microsoft/signalr": "^8.0.7",
+    "@mui/icons-material": "^6.1.8",
+    "@mui/material": "^6.1.8",
+    "@reduxjs/toolkit": "^2.3.0",
+    "axios": "^1.7.7",
+    "bulma": "^0.9.4",
+    "chart.js": "^4.4.6",
+    "i": "^0.3.7",
+    "npm": "^10.9.0",
+    "primereact": "^10.8.4",
+    "react-avatar-editor": "^13.0.2",
+    "react-bulma-components": "^4.1.0",
+    "react-drag-drop-files": "^2.4.0",
+    "react-gallery-carousel": "^0.3.0",
+    "react-hook-form": "^7.53.2",
+    "react-horizontal-scrolling-menu": "^3.2.3",
+    "react-image-accordion": "^1.2.2",
+    "react-loader-spinner": "^6.1.6",
+    "react-parallax": "^3.5.1",
+    "react-promise-tracker": "^2.1.1",
+    "react-quill": "^2.0.0",
+    "react-rating-stars-component": "^2.2.0",
+    "react-redux": "^9.1.2",
+    "react-responsive-carousel": "^3.2.23",
+    "react-router-dom": "^6.28.0",
+    "react-social-login-buttons": "^4.1.0",
+    "reactjs-social-login": "^2.6.3",
+    "redux-persist": "^6.0.0"
+  },
+  "devDependencies": {
+    "sass": "^1.81.0",
+    "sass-loader": "^16.0.3"
+  }
+}

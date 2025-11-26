@@ -1,0 +1,269 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebApi</name>
+    </assembly>
+    <members>
+        <member name="M:WebApi.Controllers.v1.FreelancerController.GetById(System.Int32)">
+            <summary>
+            Gets Freelancer Entity by Id.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.FreelancerController.GetByCategoryId(System.Int32)">
+            <summary>
+            Gets Services Entity by Freelancer Id.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.FreelancerController.GetAllAdmins">
+            <summary>
+            Gets All Admins.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.FreelancerController.Create(Application.Features.FreelancerFeatures.Commands.CreateFreelancerCommand)">
+            <summary>
+            Creates a New Freelancer.
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.FreelancerController.Login(Application.Features.FreelancerFeatures.Commands.LoginFreelancerCommand)">
+            <summary>
+            Logins Freelancer.
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.FreelancerController.LoginByPrincipal(Application.Features.FreelancerFeatures.Commands.LoginFreelancerByPrincipalCommand)">
+            <summary>
+            Logins Freelancer by Principal.
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.FreelancerController.UpdateEducations(Application.Features.FreelancerFeatures.Commands.UpdateFreelancerEducationCommand)">
+            <summary>
+            Updates Freelancer Education.
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.FreelancerController.UpdateCertifications(Application.Features.FreelancerFeatures.Commands.UpdateFreelancerCertificationCommand)">
+            <summary>
+            Updates Freelancer Certification.
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.FreelancerController.UpdateLanguages(Application.Features.FreelancerFeatures.Commands.UpdateFreelancerLanguageCommand)">
+            <summary>
+            Updates Freelancer Language.
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.FreelancerController.Update(System.Int32,Application.Features.FreelancerFeatures.Commands.UpdateFreelancerCommand)">
+            <summary>
+            Updates the Freelancer Entity based on Id.   
+            </summary>
+            <param name="id"></param>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.FreelancerController.UpdatePhoto(Application.Features.FreelancerFeatures.Commands.UpdateFreelancerPhotoCommand)">
+            <summary>
+            Updates Freelancer Language.
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.FreelancerController.UpdatePassword(Application.Features.FreelancerFeatures.Commands.UpdateFreelancerPasswordCommand)">
+            <summary>
+            Updates Freelancer Password.
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.FreelancerController.UpdateNotificationId(Application.Features.FreelancerFeatures.Commands.UpdateFreelancerNotificationIdCommand)">
+            <summary>
+            Updates Freelancer NotificationId.
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.FreelancerController.UpdateChatId(Application.Features.FreelancerFeatures.Commands.UpdateFreelancerChatIdCommand)">
+            <summary>
+            Updates Freelancer ChatId.
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.FreelancerController.ValidateSms(Application.Features.FreelancerFeatures.Commands.ValidateSmsFreelancerCommand)">
+            <summary>
+            Sens SMS validation.
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.FreelancerController.ValidateEmail(Application.Features.FreelancerFeatures.Commands.ValidateEmailFreelancerCommand)">
+            <summary>
+            Sends email validation.
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.FreelancerController.ValidateCode(Application.Features.FreelancerFeatures.Commands.ValidateCodeFreelancerCommand)">
+            <summary>
+            Updates Freelancer Language.
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.FreelancerController.LoginThirdParty(Application.Features.FreelancerFeatures.Commands.CreateFreelancerThirdPartyCommand)">
+            <summary>
+            Login Freelancer third party.
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.ProductController.GetAll">
+            <summary>
+            Gets all Products.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.ProjectController.Create(Application.Features.ProjectFeatures.Commands.CreateProjectCommand)">
+            <summary>
+            Creates a New Product.
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.ProjectController.GetAll">
+            <summary>
+            Gets all Products.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.ProjectController.GetById(System.Int32)">
+            <summary>
+            Gets Project Entity by Id.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.ProjectController.GetActiveProjectsByFreelancerId(Application.Features.ProjectFeatures.Queries.GetActiveProjectByFreelancerIdQuery)">
+            <summary>
+            Gets Project Entity by Freelancer Id.
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.ProjectController.GetActiveProjectsByUserId(Application.Features.ProjectFeatures.Queries.GetActiveProjectByUserIdQuery)">
+            <summary>
+            Gets Project Entity by User Id.
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.ServiceController.Test">
+            <summary>
+            Gets all Categories.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.ServiceController.GetAll">
+            <summary>
+            Gets all Categories.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.ServiceController.GetById(System.Int32)">
+            <summary>
+            Gets Service Entity by Id.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.ServiceController.GetByCategoryId(Application.Features.ServiceFeatures.Queries.GetAllServicesByCategoryIdQuery)">
+            <summary>
+            Gets Service Entity by Category Id.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.ServiceController.GetPremiumByCategoryId(Application.Features.ServiceFeatures.Queries.GetAllServicesPremiumByCategoryIdQuery)">
+            <summary>
+            Gets Service Entity by Category Id.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.ServiceController.GetPremiumLimitId(Application.Features.ServiceFeatures.Queries.GetAllServicesPremiumLimitQuery)">
+            <summary>
+            Gets Service Entity by limit.
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.ServiceController.GetLimitId(Application.Features.ServiceFeatures.Queries.GetAllServicesLimitQuery)">
+            <summary>
+            Gets Service Entity by limit.
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.ServiceController.OnPostUploadAsync(Application.Features.ServiceFeatures.Commands.CreateServiceCommand)">
+            <summary>
+            Creates new service
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.ServiceController.OnPutUploadAsync(System.Int32,Application.Features.ServiceFeatures.Commands.EditServiceCommand)">
+            <summary>
+            Edits service
+            </summary>
+            <param name="id"></param>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.ServiceController.SetViewService(Application.Features.ServiceFeatures.Commands.SetViewServiceCommand)">
+            <summary>
+            Creates new service view
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.v1.ServiceController.FilterServices(Application.Features.ServiceFeatures.Commands.FilterServicesCommand)">
+            <summary>
+            Filer services
+            </summary>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="T:WebApi.API.Filters.ExceptionFilter">
+            <summary>
+            Manages the exceptions in controllers
+            </summary>
+        </member>
+        <member name="M:WebApi.API.Filters.ExceptionFilter.OnException(Microsoft.AspNetCore.Mvc.Filters.ExceptionContext)">
+            <summary>   
+            Create an ExceptionContext if an Exceptions is throwed
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="T:WebApi.Hubs.ChatHub">
+            <summary>
+            Chat hub
+            </summary>
+        </member>
+        <member name="M:WebApi.Hubs.ChatHub.OnConnectedAsync">
+            <inheritdoc/>
+        </member>
+    </members>
+</doc>

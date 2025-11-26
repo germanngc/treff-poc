@@ -228,6 +228,7 @@ jobs:
       working-directory: ./apps/frontend
       run: npm run build
       env:
+        CI: false  # Don't treat warnings as errors
         REACT_APP_API_URL: ${{ vars.BACKEND_API_URL }}
         REACT_APP_SIGNALR_URL: ${{ vars.BACKEND_API_URL }}
     

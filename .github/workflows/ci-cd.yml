@@ -15,7 +15,9 @@ env:
   DOTNET_VERSION: '9.0.x'
 
 jobs:
-  # Build jobs - run in parallel
+  # Build jobs run in parallel
+  # ICP jobs commented out - ICP canisters need deployment to network, not just build
+  # See apps/icp/README.md for manual deployment instructions
   backend:
     runs-on: ubuntu-latest
     
@@ -62,33 +64,34 @@ jobs:
     #   env:
     #     CI: true
 
-  icp:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-        cache: 'npm'
-    
-    - name: Install DFX
-      uses: dfinity/setup-dfx@main
-    
-    - name: Install dependencies
-      run: npm ci
-    
-    - name: Build ICP
-      working-directory: ./apps/icp
-      run: |
-        dfx start --background --clean
-        npm run build
+  # ICP build commented out - requires deployment to network, not just build
+  # icp:
+  #   runs-on: ubuntu-latest
+  #   
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   
+  #   - name: Setup Node.js
+  #     uses: actions/setup-node@v4
+  #     with:
+  #       node-version: ${{ env.NODE_VERSION }}
+  #       cache: 'npm'
+  #   
+  #   - name: Install DFX
+  #     uses: dfinity/setup-dfx@main
+  #   
+  #   - name: Install dependencies
+  #     run: npm ci
+  #   
+  #   - name: Build ICP
+  #     working-directory: ./apps/icp
+  #     run: |
+  #       dfx start --background --clean
+  #       npm run build
 
   # Deploy infrastructure only after all builds pass
   deploy-infrastructure:
-    needs: [backend, frontend, icp]
+    needs: [backend, frontend]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     environment: production
@@ -253,33 +256,34 @@ jobs:
           --distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }} \
           --paths "/*"
   
-  deploy-icp:
-    needs: [icp]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    runs-on: ubuntu-latest
-    environment: production
-    
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-        cache: 'npm'
-    
-    - name: Install DFX
-      uses: dfinity/setup-dfx@main
-    
-    - name: Install dependencies
-      run: npm ci
-    
-    - name: Deploy ICP to Mainnet
-      working-directory: ./apps/icp
-      run: |
-        echo "${{ secrets.DFX_IDENTITY }}" > identity.pem
-        dfx identity import github-actions identity.pem
-        dfx identity use github-actions
-        dfx deploy --network ic
-      env:
-        DFX_IDENTITY: ${{ secrets.DFX_IDENTITY }}
+  # ICP deployment commented out - requires mainnet credentials and cycles
+  # deploy-icp:
+  #   needs: [icp]
+  #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+  #   runs-on: ubuntu-latest
+  #   environment: production
+  #   
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   
+  #   - name: Setup Node.js
+  #     uses: actions/setup-node@v4
+  #     with:
+  #       node-version: ${{ env.NODE_VERSION }}
+  #       cache: 'npm'
+  #   
+  #   - name: Install DFX
+  #     uses: dfinity/setup-dfx@main
+  #   
+  #   - name: Install dependencies
+  #     run: npm ci
+  #   
+  #   - name: Deploy ICP to Mainnet
+  #     working-directory: ./apps/icp
+  #     run: |
+  #       echo "${{ secrets.DFX_IDENTITY }}" > identity.pem
+  #       dfx identity import github-actions identity.pem
+  #       dfx identity use github-actions
+  #       dfx deploy --network ic
+  #     env:
+  #       DFX_IDENTITY: ${{ secrets.DFX_IDENTITY }}

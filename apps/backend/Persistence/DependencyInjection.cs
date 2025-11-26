@@ -9,7 +9,6 @@ using Persistence.Repositories;
 using Persistence.Repositories.Base;
 using MediatR;
 using System.Reflection;
-using Infrastructure.Services;
 using Application.Interfaces.Services;
 using Persistence.Services;
 

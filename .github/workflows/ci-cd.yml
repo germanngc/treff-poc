@@ -74,9 +74,7 @@ jobs:
         cache: 'npm'
     
     - name: Install DFX
-      run: |
-        DFX_VERSION=0.16.1 sh -ci "$(curl -fsSL https://internetcomputer.org/install.sh)"
-        echo "$HOME/.local/share/dfx/bin" >> $GITHUB_PATH
+      uses: dfinity/setup-dfx@main
     
     - name: Install dependencies
       run: npm ci
@@ -263,9 +261,7 @@ jobs:
         cache: 'npm'
     
     - name: Install DFX
-      run: |
-        DFX_VERSION=0.16.1 sh -ci "$(curl -fsSL https://internetcomputer.org/install.sh)"
-        echo "$HOME/.local/share/dfx/bin" >> $GITHUB_PATH
+      uses: dfinity/setup-dfx@main
     
     - name: Install dependencies
       run: npm ci

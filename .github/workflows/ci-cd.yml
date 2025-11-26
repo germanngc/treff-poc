@@ -137,18 +137,74 @@ jobs:
         ASSETS_BUCKET_NAME: ${{ vars.ASSETS_BUCKET_NAME }}
     
     - name: CDK Deploy
+      id: cdk-deploy
       working-directory: ./infrastructure
-      run: npm run deploy -- --require-approval never
+      run: |
+        OUTPUT=$(npm run deploy -- --require-approval never 2>&1)
+        echo "$OUTPUT"
+        
+        # Extract outputs from CDK deployment
+        EC2_IP=$(echo "$OUTPUT" | grep -o 'EC2PublicIP = [0-9.]*' | cut -d' ' -f3)
+        CLOUDFRONT_URL=$(echo "$OUTPUT" | grep -o 'CloudFrontURL = https://[^[:space:]]*' | cut -d' ' -f3)
+        DISTRIBUTION_ID=$(echo "$OUTPUT" | grep -o 'CloudFrontDistributionId = [^[:space:]]*' | cut -d' ' -f3)
+        BACKEND_URL=$(echo "$OUTPUT" | grep -o 'BackendURL = http://[^[:space:]]*' | cut -d' ' -f3)
+        
+        echo "ec2_ip=$EC2_IP" >> $GITHUB_OUTPUT
+        echo "cloudfront_url=$CLOUDFRONT_URL" >> $GITHUB_OUTPUT
+        echo "distribution_id=$DISTRIBUTION_ID" >> $GITHUB_OUTPUT
+        echo "backend_url=$BACKEND_URL" >> $GITHUB_OUTPUT
       env:
         MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
         MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
         FRONTEND_BUCKET_NAME: ${{ vars.FRONTEND_BUCKET_NAME }}
         ASSETS_BUCKET_NAME: ${{ vars.ASSETS_BUCKET_NAME }}
     
+    - name: Generate Deployment Summary
+      run: |
+        cat >> $GITHUB_STEP_SUMMARY << 'EOF'
+        # 🚀 Treff Application Deployed Successfully!
+        
+        ## 📍 Application Endpoints
+        
+        | Service | URL |
+        |---------|-----|
+        | 🌐 **Frontend** | ${{ steps.cdk-deploy.outputs.cloudfront_url }} |
+        | 🔌 **Backend API** | ${{ steps.cdk-deploy.outputs.backend_url }} |
+        
+        ## 🖥️ Server Access
+        
+        **EC2 Instance IP:** `${{ steps.cdk-deploy.outputs.ec2_ip }}`
+        
+        **SSH Command:**
+        ```bash
+        ssh -i ~/.ssh/your-key.pem ubuntu@${{ steps.cdk-deploy.outputs.ec2_ip }}
+        ```
+        
+        > ⚠️ **Note:** Replace `your-key.pem` with your actual EC2 key pair name.
+        
+        ## 📦 Resources
+        
+        - **CloudFront Distribution ID:** `${{ steps.cdk-deploy.outputs.distribution_id }}`
+        - **Frontend Bucket:** `${{ vars.FRONTEND_BUCKET_NAME }}`
+        - **Assets Bucket:** `${{ vars.ASSETS_BUCKET_NAME }}`
+        - **Region:** `${{ vars.AWS_REGION }}`
+        
+        ## 🔍 Quick Health Check
+        
+        Test the backend API:
+        ```bash
+        curl ${{ steps.cdk-deploy.outputs.backend_url }}/api/health
+        ```
+        
+        ---
+        *Deployment completed at $(date -u +"%Y-%m-%d %H:%M:%S UTC")*
+        EOF
+    
     outputs:
-      ec2_ip: ${{ steps.cdk-outputs.outputs.ec2_ip }}
-      bucket_name: ${{ steps.cdk-outputs.outputs.bucket_name }}
-      distribution_id: ${{ steps.cdk-outputs.outputs.distribution_id }}
+      ec2_ip: ${{ steps.cdk-deploy.outputs.ec2_ip }}
+      cloudfront_url: ${{ steps.cdk-deploy.outputs.cloudfront_url }}
+      distribution_id: ${{ steps.cdk-deploy.outputs.distribution_id }}
+      backend_url: ${{ steps.cdk-deploy.outputs.backend_url }}
 
   deploy-backend:
     name: Deploy Backend

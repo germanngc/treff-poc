@@ -118,6 +118,11 @@ jobs:
       working-directory: ./infrastructure
       run: npm run build
     
+    - name: Bootstrap CDK (if needed)
+      working-directory: ./infrastructure
+      run: npx cdk bootstrap aws://${{ secrets.AWS_ACCOUNT_ID }}/${{ vars.AWS_REGION }} || true
+      continue-on-error: true
+    
     - name: CDK Diff
       working-directory: ./infrastructure
       run: npm run diff

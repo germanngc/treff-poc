@@ -48,7 +48,7 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore TreffServices.sln
       working-directory: ./apps/backend
     
     - name: Build
@@ -100,7 +100,7 @@ jobs:
     
     - name: Install DFX
       run: |
-        curl -fsSL https://internetcomputer.org/install.sh | sh
+        DFX_VERSION=0.16.1 sh -ci "$(curl -fsSL https://internetcomputer.org/install.sh)"
         echo "$HOME/.local/share/dfx/bin" >> $GITHUB_PATH
     
     - name: Install dependencies
@@ -299,7 +299,7 @@ jobs:
     
     - name: Install DFX
       run: |
-        curl -fsSL https://internetcomputer.org/install.sh | sh
+        DFX_VERSION=0.16.1 sh -ci "$(curl -fsSL https://internetcomputer.org/install.sh)"
         echo "$HOME/.local/share/dfx/bin" >> $GITHUB_PATH
     
     - name: Install dependencies

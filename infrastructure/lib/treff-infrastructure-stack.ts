@@ -336,6 +336,18 @@ export class TreffInfrastructureStack extends cdk.Stack {
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
       },
+      additionalBehaviors: {
+        '/api/*': {
+          origin: new origins.HttpOrigin(`${eip.ref}`, {
+            protocolPolicy: cloudfront.OriginProtocolPolicy.HTTP_ONLY,
+            httpPort: 80,
+          }),
+          viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+          cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+          allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
+          originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER,
+        },
+      },
       defaultRootObject: 'index.html',
       errorResponses: [
         {
@@ -368,8 +380,13 @@ export class TreffInfrastructureStack extends cdk.Stack {
     });
 
     new cdk.CfnOutput(this, 'BackendURL', {
-      value: `http://${eip.ref}`,
-      description: 'Backend API URL',
+      value: `https://${distribution.distributionDomainName}/`,
+      description: 'Backend API URL (via CloudFront)',
+    });
+
+    new cdk.CfnOutput(this, 'BackendDirectURL', {
+      value: `http://${eip.ref}/`,
+      description: 'Backend Direct URL (HTTP only - use CloudFront URL instead)',
     });
 
     new cdk.CfnOutput(this, 'FrontendBucket', {

@@ -1,5 +1,7 @@
+# Compiled output - keep bin/*.js for CDK
 *.js
 !jest.config.js
+!bin/*.js
 *.d.ts
 node_modules/
 **/node_modules/

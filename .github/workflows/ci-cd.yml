@@ -114,6 +114,10 @@ jobs:
       working-directory: ./infrastructure
       run: npm ci
     
+    - name: Build CDK
+      working-directory: ./infrastructure
+      run: npm run build
+    
     - name: CDK Diff
       working-directory: ./infrastructure
       run: npm run diff

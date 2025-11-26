@@ -303,8 +303,27 @@ export class TreffInfrastructureStack extends cdk.Stack {
       comment: 'OAI for Treff frontend',
     });
 
-    // Grant read access only if we created the bucket (imported buckets can't be modified)
-    if (!props.frontendBucketName && frontendBucket instanceof s3.Bucket) {
+    // Grant CloudFront read access to the frontend bucket
+    // For manually created buckets, we need to add the policy statement directly
+    if (props.frontendBucketName) {
+      // Imported bucket - add policy manually
+      const bucketPolicy = new s3.CfnBucketPolicy(this, 'FrontendBucketPolicy', {
+        bucket: props.frontendBucketName,
+        policyDocument: {
+          Statement: [
+            {
+              Effect: 'Allow',
+              Principal: {
+                CanonicalUser: oai.cloudFrontOriginAccessIdentityS3CanonicalUserId,
+              },
+              Action: 's3:GetObject',
+              Resource: `arn:aws:s3:::${props.frontendBucketName}/*`,
+            },
+          ],
+        },
+      });
+    } else if (frontendBucket instanceof s3.Bucket) {
+      // CDK-created bucket - use grantRead helper
       frontendBucket.grantRead(oai);
     }
 

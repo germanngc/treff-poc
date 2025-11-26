@@ -19,6 +19,7 @@ jobs:
   # ICP jobs commented out - ICP canisters need deployment to network, not just build
   # See apps/icp/README.md for manual deployment instructions
   backend:
+    name: Build Backend
     runs-on: ubuntu-latest
     
     steps:
@@ -39,6 +40,7 @@ jobs:
       run: dotnet test apps/backend/TreffServices.sln --no-build --configuration Release --verbosity normal
 
   frontend:
+    name: Build Frontend
     runs-on: ubuntu-latest
     
     steps:
@@ -91,6 +93,7 @@ jobs:
 
   # Deploy infrastructure only after all builds pass
   deploy-infrastructure:
+    name: Deploy Infrastructure
     needs: [backend, frontend]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
@@ -148,6 +151,7 @@ jobs:
       distribution_id: ${{ steps.cdk-outputs.outputs.distribution_id }}
 
   deploy-backend:
+    name: Deploy Backend
     needs: [deploy-infrastructure]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
@@ -210,6 +214,7 @@ jobs:
           --output text
 
   deploy-frontend:
+    name: Deploy Frontend
     needs: [deploy-infrastructure]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest

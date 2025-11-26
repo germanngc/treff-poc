@@ -438,7 +438,7 @@ yarn-error.log*
 *.suo
 *.ntvs*
 *.njsproj
-*.sln
+# *.sln - DO NOT ignore, needed for .NET builds
 *.sw?
 
 # OS generated files

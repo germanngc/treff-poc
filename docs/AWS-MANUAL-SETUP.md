@@ -17,7 +17,7 @@ This guide walks you through manually creating the required AWS resources before
 ```bash
 # Set your AWS account ID
 ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
-AWS_REGION="us-east-1"  # Change if needed
+AWS_REGION="us-east-2"  # Change if needed
 
 # Create frontend bucket
 FRONTEND_BUCKET="treff-frontend-${ACCOUNT_ID}"
@@ -354,7 +354,7 @@ Go to: `Settings → Secrets and variables → Actions → Variables`
 **Add these variables:**
 ```bash
 # Copy these values from aws-resources.env
-AWS_REGION=us-east-1
+AWS_REGION=us-east-2
 AWS_ROLE_ARN=arn:aws:iam::123456789012:role/GitHubActionsDeploymentRole
 FRONTEND_BUCKET_NAME=treff-frontend-123456789012
 DEPLOYMENT_BUCKET_NAME=treff-deployments-123456789012

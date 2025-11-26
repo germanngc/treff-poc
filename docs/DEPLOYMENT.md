@@ -31,7 +31,7 @@ nano .env
 MYSQL_ROOT_PASSWORD=YourSecureRootPassword123!
 MYSQL_PASSWORD=YourSecureUserPassword123!
 CDK_DEFAULT_ACCOUNT=123456789012  # Your AWS Account ID
-CDK_DEFAULT_REGION=us-east-1      # Your preferred region
+CDK_DEFAULT_REGION=us-east-2      # Your preferred region
 ```
 
 ### Phase 3: Deploy Infrastructure

@@ -10,7 +10,7 @@ brew install awscli
 
 # Configure AWS credentials
 aws configure
-# Enter: Access Key ID, Secret Access Key, Region (us-east-1), Format (json)
+# Enter: Access Key ID, Secret Access Key, Region (us-east-2), Format (json)
 
 # Install AWS CDK
 npm install -g aws-cdk

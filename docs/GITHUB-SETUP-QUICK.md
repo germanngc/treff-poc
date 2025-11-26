@@ -58,7 +58,7 @@ Click **New repository secret** for each:
 Go to: `https://github.com/YOUR_USERNAME/treff-poc/settings/variables/actions`
 
 Click **New repository variable** for each:
-- [ ] `AWS_REGION` = `us-east-1`
+- [ ] `AWS_REGION` = `us-east-2`
 - [ ] `BACKEND_API_URL` = `http://<EC2_PUBLIC_IP>` (from CDK output)
 - [ ] `FRONTEND_BUCKET_NAME` = `<from CDK output>`
 - [ ] `CLOUDFRONT_DISTRIBUTION_ID` = `<from CDK output>`
@@ -85,7 +85,7 @@ Click **New repository variable** for each:
 
 | Variable Name | Description | Example Value |
 |---------------|-------------|---------------|
-| `AWS_REGION` | AWS deployment region | `us-east-1` |
+| `AWS_REGION` | AWS deployment region | `us-east-2` |
 | `BACKEND_API_URL` | Backend API endpoint | `http://54.123.45.67` |
 | `FRONTEND_BUCKET_NAME` | S3 bucket for frontend | `treff-frontend-123456789012` |
 | `CLOUDFRONT_DISTRIBUTION_ID` | CloudFront dist ID | `E1234567890ABC` |

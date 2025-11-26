@@ -93,7 +93,7 @@ Navigate to: **Settings → Secrets and variables → Actions → Variables**
 
 **`AWS_REGION`**
 - **Description**: AWS region for deployment
-- **Value**: `us-east-1` (or your chosen region)
+- **Value**: `us-east-2` (or your chosen region)
 
 **`BACKEND_API_URL`**
 - **Description**: Backend API URL for frontend configuration
@@ -223,7 +223,7 @@ Go to: **https://github.com/<your-username>/treff-poc/settings/variables/actions
 Click **New repository variable** for each:
 
 ```
-AWS_REGION = us-east-1
+AWS_REGION = us-east-2
 BACKEND_API_URL = http://<EC2_IP>
 FRONTEND_BUCKET_NAME = treff-frontend-123456789012
 CLOUDFRONT_DISTRIBUTION_ID = E1234567890ABC
@@ -284,7 +284,7 @@ Use this checklist to ensure all configurations are complete:
 - [ ] DFX_IDENTITY (if using ICP)
 
 ### Variables ✓
-- [ ] AWS_REGION (e.g., us-east-1)
+- [ ] AWS_REGION (e.g., us-east-2)
 - [ ] AWS_ROLE_ARN (GitHubActionsDeploymentRole ARN)
 - [ ] FRONTEND_BUCKET_NAME (manually created bucket)
 - [ ] DEPLOYMENT_BUCKET_NAME (manually created bucket)

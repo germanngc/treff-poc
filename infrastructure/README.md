@@ -89,7 +89,7 @@ Set environment variables (or use defaults):
 ```bash
 export MYSQL_ROOT_PASSWORD="YourSecurePassword123!"
 export MYSQL_PASSWORD="TreffUserPassword123!"
-export CDK_DEFAULT_REGION="us-east-1"
+export CDK_DEFAULT_REGION="us-east-2"
 ```
 
 ## Deployment

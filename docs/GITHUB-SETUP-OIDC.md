@@ -84,7 +84,7 @@ Navigate to: **Settings → Secrets and variables → Actions → Variables**
 
 **`AWS_REGION`**
 - **Description**: AWS region where resources are deployed
-- **Value**: `us-east-1` (or your chosen region)
+- **Value**: `us-east-2` (or your chosen region)
 - **Must match**: Region where you created OIDC provider and IAM role
 
 #### 2. AWS IAM Role ARN (OIDC)
@@ -202,7 +202,7 @@ Click **New repository variable** for each:
 
 | Variable Name | Value | Example |
 |---------------|-------|---------|
-| `AWS_REGION` | Your AWS region | `us-east-1` |
+| `AWS_REGION` | Your AWS region | `us-east-2` |
 | `AWS_ROLE_ARN` | GitHubActionsDeploymentRole ARN | `arn:aws:iam::123456789012:role/GitHubActionsDeploymentRole` |
 | `FRONTEND_BUCKET_NAME` | Frontend bucket name | `treff-frontend-prod` |
 | `DEPLOYMENT_BUCKET_NAME` | Deployments bucket name | `treff-deployments-prod` |
@@ -312,7 +312,7 @@ Use this checklist to ensure all configurations are complete:
 - [ ] `DFX_IDENTITY` (only if using ICP)
 
 ### GitHub Variables ✓
-- [ ] `AWS_REGION` (e.g., `us-east-1`)
+- [ ] `AWS_REGION` (e.g., `us-east-2`)
 - [ ] `AWS_ROLE_ARN` (GitHubActionsDeploymentRole ARN)
 - [ ] `FRONTEND_BUCKET_NAME` (manually created bucket)
 - [ ] `DEPLOYMENT_BUCKET_NAME` (manually created bucket)

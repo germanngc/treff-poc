@@ -144,13 +144,13 @@ aws iam create-role \
 #### 3. Three S3 Buckets
 ```bash
 # Frontend static hosting
-aws s3 mb s3://treff-frontend-prod --region us-east-1
+aws s3 mb s3://treff-frontend-prod --region us-east-2
 
 # Deployment artifacts (backend builds)
-aws s3 mb s3://treff-deployments-prod --region us-east-1
+aws s3 mb s3://treff-deployments-prod --region us-east-2
 
 # User-uploaded assets
-aws s3 mb s3://treff-assets-prod --region us-east-1
+aws s3 mb s3://treff-assets-prod --region us-east-2
 ```
 
 **Why manual?**: 

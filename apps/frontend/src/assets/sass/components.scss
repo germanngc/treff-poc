@@ -1,0 +1,334 @@
+.p-avatar-lg {
+  width: 64px;
+  height: 64px;
+}
+
+.p-avatar-xl {
+  width: 100px;
+  height: 100px;
+}
+
+.navbar-item {
+  font-weight: 600;
+  font-size: $text-18;
+  color: #002541;
+}
+
+.freelancer-card {
+  width: $text-228;
+  height: $text-350;
+}
+
+.login-form > .field > .input {
+  background-color: $light;
+}
+
+.blue > .p-menubar {
+  background-color: $link !important;
+  color: #fff !important;
+  border-radius: 0px !important;
+  border: 0px !important;
+}
+
+.blue
+  > .p-menubar
+  .p-menubar-root-list
+  > .p-menuitem
+  > .p-menuitem-link
+  .p-menuitem-text {
+  color: #fff;
+}
+
+.blue
+  > .p-menubar
+  .p-menubar-root-list
+  > .p-menuitem
+  .p-menuitem-active
+  > .p-menuitem-link {
+  background-color: #eaeaea;
+}
+
+.blue
+  .p-menubar
+  .p-menubar-root-list
+  > .p-menuitem
+  > .p-menuitem-link:not(.p-disabled):hover {
+  background-color: #20a8dc !important;
+}
+
+.navbar-item img {
+  max-height: 92px !important;
+}
+
+.blue-back {
+  background-color: rgba(50, 71, 124, 0.2) !important;
+}
+
+.gray-back {
+  background: rgba(67, 42, 172, 0.2) !important;
+  color: #002541;
+}
+
+.gray-back-text {
+  color: #002541 !important;
+}
+
+.gray > .p-menubar {
+  background-color: $light !important;
+  color: #9f9d9d !important;
+  border-radius: 0px !important;
+  border: 0px !important;
+}
+
+.gray
+  > .p-menubar
+  .p-menubar-root-list
+  > .p-menuitem
+  > .p-menuitem-link
+  .p-menuitem-text {
+  color: #9f9d9d !important;
+}
+
+.gray
+  .p-menubar
+  .p-menubar-root-list
+  > .p-menuitem
+  > .p-menuitem-link:not(.p-disabled):hover {
+  background-color: #cdc8e2 !important;
+}
+
+@media (max-width: 960px) {
+  .blue
+    > .p-menubar
+    .p-menubar-root-list
+    > .p-menuitem
+    > .p-menuitem-link
+    .p-menuitem-text {
+    color: #9f9d9d !important;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .blue .p-menubar .p-menubar-button:hover {
+    color: #6c757d;
+    background: rgba(50, 71, 124, 0.2) !important;
+    box-shadow: 0 0 0 0.2rem rgba(50, 71, 124, 0.2);
+  }
+}
+
+.backgroud-wave-full {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  //   background-image: url(../images/treff_waves.png) no-repeat center
+  //     center fixed !important;
+}
+
+//STEPPER
+@media screen and (max-width: 640px) {
+  .steps-demo .p-steps {
+    height: 350px;
+  }
+  .steps-demo .p-steps > ul {
+    flex-direction: column;
+    height: 100%;
+  }
+  .steps-demo .p-steps > ul .p-steps-item {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .steps-demo .p-steps > ul .p-steps-item:before {
+    position: static;
+    left: auto;
+    top: auto;
+    margin-top: 0;
+    border-left: 1px solid var(--surface-d);
+    border-top: 0 none;
+    width: auto;
+    height: 100%;
+    margin-left: 1rem;
+  }
+  .steps-demo .p-steps > ul .p-steps-item .p-menuitem-link {
+    flex-direction: row;
+    overflow: visible;
+  }
+  .steps-demo .p-steps > ul .p-steps-item .p-menuitem-link .p-steps-title {
+    margin: 0 0.5rem 0;
+  }
+  .steps-demo .p-steps > ul .p-steps-item:last-child {
+    flex-grow: 0;
+  }
+  .steps-demo .p-steps > ul .p-steps-item:last-child .p-menuitem-link {
+    padding: 0;
+  }
+  .steps-demo .p-steps > ul .p-steps-item:last-child:before {
+    display: none;
+  }
+}
+
+//BADGES
+.custom-badge > .p-badge {
+  background-color: rgba($color: #000000, $alpha: 0.2) !important;
+  cursor: pointer;
+}
+
+.custom-badge {
+  margin-top: 80%;
+  margin-left: -20%;
+}
+
+.p-card-content {
+  padding: 0px !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  // min-height: 150px !important;
+}
+
+.p-card-footer {
+  padding: 0px !important;
+  padding-bottom: 10px !important;
+}
+
+.p-card-body {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+
+.p-card {
+  border-radius: 0.25rem !important;
+  box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%),
+    0 0px 0 1px rgb(10 10 10 / 2%) !important;
+}
+
+.p-carousel-next {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+.p-carousel-prev {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+
+.uploader {
+  width: 100%;
+  height: 146px;
+  left: 371px;
+  top: 857px;
+
+  background: #fbfbfb;
+  border: 1px solid #bfbfbf;
+}
+
+.image-editor > canvas {
+  width: 100% !important;
+  height: auto !important;
+}
+
+.card-gray .p-card {
+  background: #f3f1f1 !important;
+}
+
+.card-gray .p-card .p-card-title {
+  font-weight: 700 !important;
+  font-size: 20px !important;
+  line-height: 23px !important;
+
+  color: #002541 !important;
+
+  padding-top: 20px;
+}
+
+.img-33 {
+  width: auto !important;
+  height: $text-33 !important;
+}
+
+.img-logo {
+  width: auto !important;
+  height: $text-53 !important;
+}
+
+.img-logo-287 {
+  width: $text-287 !important;
+  height: auto !important;
+}
+
+.img-footer {
+  width: $text-350;
+  height: auto;
+}
+
+.img-header {
+  height: $text-240;
+  background-size: cover; /* Hace que la imagen ocupe todo el div */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+  background-position: top left; /* Posición de la imagen en la esquina superior izquierda */
+}
+
+.img-header .hero-body{
+//  height: 150px;
+}
+
+.img-parallax {
+  height: 800px;
+  width: 100vw;
+  background-position: top right;
+}
+
+.react-parallax {
+  height: 50vh !important;
+  min-height: 538px !important;
+}
+
+.react-parallax .react-parallax-content .hero {
+  height: 50vh !important;
+  background-color: rgba(0, 0, 0, 0.4);
+  min-height: 538px !important;
+}
+
+@media screen and (max-width: 1200px) {
+  .img-parallax {
+    background-position: top left;
+  }
+  .react-parallax {
+    height: 60vh !important;
+    min-height: 638px !important;
+  }
+  .react-parallax .react-parallax-content .hero {
+    height: 60vh !important;
+    background-color: rgba(0, 0, 0, 0.4);
+    min-height: 638px !important;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .img-parallax {
+    background-position: top left;
+  }
+  .react-parallax {
+    height: 60vh !important;
+    min-height: 438px !important;
+  }
+  .react-parallax .react-parallax-content .hero {
+    height: 60vh !important;
+    background-color: rgba(0, 0, 0, 0.4);
+    min-height: 438px !important;
+  }
+}
+
+@media screen and (max-width: 485px) {
+  .img-parallax {
+    background-position: top left;
+  }
+  .react-parallax {
+    min-height: 550px !important;
+    height: 65vh !important;
+  }
+  .react-parallax .react-parallax-content .hero {
+    min-height: 550px !important;
+    height: 65vh !important;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+}

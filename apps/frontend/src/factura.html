@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tarjeta de Clínica</title>
+    <style>
+      @page {
+        margin: 20mm;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20pt;
+        background-color: #fff;
+      }
+
+      .logo {
+        font-weight: bold;
+        font-size: 18pt;
+      }
+
+      .address {
+        text-align: right;
+        font-size: 12pt;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #002060;
+      }
+
+      .order {
+        padding: 5pt;
+        font-size: 10pt;
+        background-color: #002060;
+        color: #fff;
+        text-align: center;
+      }
+      .order-value {
+        font-size: 10pt;
+        padding: 5pt;
+        color: red;
+        text-align: center;
+      }
+      .order-box {
+        border: #002060 1pt solid;
+        border-radius: 5pt;
+        margin-left: 20pt;
+        width: 100pt;
+        font-weight: bold;
+      }
+
+      /* Info Section */
+      .info-names {
+        width: 100%;
+      }
+
+      .info-section {
+        display: flex;
+        justify-content: space-between;
+        padding: 10pt;
+        color: #000;
+      }
+
+      .info-box {
+        display: flex;
+        border: 2pt solid #fff;
+        padding: 5pt;
+      }
+
+      .info-label {
+        padding-right: 10pt;
+        font-weight: bold;
+        background-color: #002060;
+        color: #fff;
+        padding: 5pt;
+        width: 100pt;
+      }
+
+      .info-content {
+        flex-grow: 1;
+        padding: 5pt;
+        border: #002060 1pt solid;
+        width: 100%;
+      }
+
+      .date-box {
+        display: flex;
+        border: 2pt solid #fff;
+        padding: 5pt;
+        margin: 5pt;
+        width: 200pt;
+        justify-content: space-around;
+      }
+
+      .date-section {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .date-label {
+        font-weight: bold;
+        background-color: #002060;
+        color: #fff;
+        padding: 5pt;
+        width: 100%;
+        text-align: center;
+      }
+
+      .date-content {
+        padding: 5pt;
+        border: #002060 1pt solid;
+        width: 100%;
+        text-align: center;
+      }
+
+      @media print {
+        .header {
+          padding: 10pt;
+        }
+        .logo,
+        .address,
+        .order,
+        .order-value {
+          font-size: 10pt;
+        }
+      }
+
+      .description-section {
+        border-collapse: collapse;
+        min-height: 200pt;
+      }
+
+      .description-table {
+        border: #002060 1pt solid;
+        border-radius: 5pt;
+        margin: 10pt;
+      }
+
+      .description-header {
+        background-color: #002060;
+        color: #fff;
+        padding: 10pt;
+        text-align: left;
+        text-align: center;
+        font-weight: bold;
+      }
+
+      .table-row-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 10pt 10pt 3pt 10pt;
+        border-bottom: 1pt solid #002060;
+        font-weight: bold;
+      }
+
+      .table-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10pt;
+      }
+
+      .table-cell {
+        flex: 1;
+        padding: 5pt;
+      }
+
+      .table-cell:first-child {
+        flex: 0.5;
+      }
+
+      .table-cell:nth-child(2) {
+        flex: 2;
+      }
+
+      .table-cell:last-child,
+      .table-cell:nth-last-child(2),
+      .table-cell:nth-last-child(3) {
+        text-align: right;
+      }
+
+      .table-footer {
+        display: flex;
+        justify-content: flex-end;
+        padding: 10pt;
+        font-weight: bold;
+        margin-left: 10pt;
+        margin-right: 10pt;
+      }
+
+      .total-label {
+        padding-right: 10pt;
+      }
+
+      /* Nueva sección de Observaciones y Contacto */
+
+      .observations {
+        margin: 10pt;
+      }
+      .footer-section {
+        display: flex;
+        justify-content: space-between;
+        padding: 10pt;
+        background-color: #fff;
+        color: #000;
+        font-size: 10pt;
+      }
+      .footer-left {
+        border: 1pt solid #002060;
+        border-radius: 5pt;
+        /* padding: 10pt; */
+      }
+      .footer-left-title {
+        font-weight: bold;
+        background-color: #002060;
+        color: #fff;
+        padding: 10pt;
+        text-align: center;
+      }
+
+      .footer-left-description {
+        padding: 5pt;
+        width: 100%;
+      }
+
+      .footer-left,
+      .footer-right {
+        flex: 1;
+      }
+
+      .footer-right {
+        text-align: left;
+        padding: 5pt;
+        color: #002060;
+        font-size: 12pt;
+      }
+
+      .contact-info {
+        margin-top: 10pt;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .contact-info div {
+        margin-bottom: 5pt;
+      }
+
+      .contact-info div img {
+        margin-right: 5pt;
+      }
+
+      .contact-icon {
+        width: 20pt; /* Adjust size as needed */
+        height: auto;
+      }
+
+      /* Estilos para el texto de contacto y los iconos */
+      .contact-text {
+        display: flex;
+        align-items: center;
+      }
+
+      .contact-icon {
+        margin-right: 5pt;
+      }
+
+      .decorative-line {
+        border-top: 5px dashed #000;
+        border-bottom: none;
+        height: 0;
+        margin: 10pt 10pt 0 10pt;
+      }
+
+      .billing-section {
+        margin: 10pt 10pt;
+        font-size: 10pt;
+        background-color: #fff;
+        border: 1pt solid #002060;
+        border-radius: 5pt;
+      }
+
+      .billing-header {
+        font-weight: bold;
+        background-color: #002060;
+        color: #fff;
+        padding: 10pt;
+        border-top-left-radius: 5pt;
+        border-top-right-radius: 5pt;
+        margin-bottom: 10pt;
+      }
+
+      .billing-row {
+        display: flex;
+        padding: 5pt 10pt;
+        align-items: center;
+      }
+
+      .billing-row label {
+        min-width: 140pt;
+        color: #002060;
+        margin-right: 10pt;
+      }
+
+      .billing-row input[type="text"] {
+        flex: 1;
+        padding: 5pt;
+        margin-right: 10pt;
+        border: 1pt solid #002060;
+      }
+
+      .billing-methods {
+        padding: 5pt 10pt;
+        border-top: 1pt solid #002060;
+      }
+
+      .billing-methods label {
+        display: block;
+        margin: 5pt 0;
+      }
+
+      .billing-methods label input[type="checkbox"] {
+        margin-right: 5pt;
+      }
+
+      /* Estilos para los métodos de pago */
+      .methods {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .methods label {
+        margin-right: 15pt;
+        font-weight: normal;
+        color: #002060;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo">MARNEGRO<br />health clinic</div>
+      <div class="address">
+        <p>
+          <b>Mar Negro #1370</b><br />Chapultepec Country, C.P. 44620<br />Guadalajara,
+          Jalisco, México.
+        </p>
+        <div class="order-box">
+          <div class="order">ORDEN</div>
+          <div class="order-value">AE-14435</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-names">
+        <div class="info-box">
+          <span class="info-label">PACIENTE:</span>
+          <span class="info-content">MAX VAZQUEZ</span>
+        </div>
+        <div class="info-box">
+          <span class="info-label">DOCTOR:</span>
+          <span class="info-content">Aldo Antonio Ortiz Flores</span>
+        </div>
+      </div>
+      <div class="date-box">
+        <div class="date-section">
+          <span class="date-label">DÍA</span>
+          <span class="date-content">5</span>
+        </div>
+        <div class="date-section">
+          <span class="date-label">MES</span>
+          <span class="date-content">1</span>
+        </div>
+        <div class="date-section">
+          <span class="date-label">AÑO</span>
+          <span class="date-content">24</span>
+        </div>
+      </div>
+    </div>
+    <!-- Serivicios -->
+    <div class="description-table">
+      <div class="description-header">DESCRIPCIÓN:</div>
+      <div class="description-section">
+        <!-- Fila de encabezados de la tabla -->
+        <div class="table-row-header">
+          <div class="table-cell">Código</div>
+          <div class="table-cell">Descripción</div>
+          <div class="table-cell">SUBTOTAL</div>
+          <div class="table-cell">IVA</div>
+          <div class="table-cell">TOTAL</div>
+        </div>
+        <!-- Filas de elementos de la tabla -->
+        <!-- Repite este bloque para cada fila de datos -->
+        <div class="table-row">
+          <div class="table-cell">RM-04</div>
+          <div class="table-cell">Resonancia Magnética Codo</div>
+          <div class="table-cell">$5,172.41</div>
+          <div class="table-cell">$827.59</div>
+          <div class="table-cell">$6,000.00</div>
+        </div>
+        <!-- ... más filas ... -->
+      </div>
+      <!-- Pie de la tabla con el total -->
+      <div class="table-footer">
+        <div class="total-label">Total:</div>
+        <div class="total-label">$6,000.00</div>
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------------- -->
+
+    <!-- Sección de pie de página con Observaciones y Contacto -->
+    <div class="observations">
+      <div class="footer-section">
+        <div class="footer-left">
+          <div class="footer-left-title">OBSERVACIONES</div>
+          <div class="footer-left-description">OBSERVACIONES DE MAX</div>
+        </div>
+        <div class="footer-right">
+          <p>Favor de realizar sus pagos:</p>
+          <p><b>CENTRO DE IMAGENOLOGÍA MAR NEGRO SC</b> en <b>BBVA</b></p>
+          <p>No. de Cuenta <b>0116335055</b></p>
+          <p>No. de Cuenta CLABE <b>012 320 00116335055 5</b></p>
+        </div>
+      </div>
+
+      <!-- Sección de información de contacto -->
+      <div class="contact-info">
+        <div>
+          <img src="path_to_email_icon.png" alt="Email" class="contact-icon" />
+          <span>contacto@marnegrohc.com</span>
+        </div>
+        <div>
+          <img src="path_to_phone_icon.png" alt="Phone" class="contact-icon" />
+          <span>33 2466 4339 • 33 2466 4340 • 33 1593 3238</span>
+          <img src="path_to_phone_icon.png" alt="Phone" class="contact-icon" />
+          <span>33 2220 0505</span>
+        </div>
+        <div>
+          <img src="path_to_web_icon.png" alt="Web" class="contact-icon" />
+          <span>www.marnegrohc.com</span>
+        </div>
+      </div>
+    </div>
+    <hr class="decorative-line" />
+
+    <!-- Sección de Datos de Facturación -->
+    <div class="billing-section">
+      <div class="billing-header">DATOS DE FACTURACIÓN</div>
+      <div class="billing-info">
+        <div class="billing-row">
+          <label for="rfc">RFC:</label>
+          <input
+            type="text"
+            id="rfc"
+            name="rfc"
+            value="XAXX010101000"
+            disabled
+          />
+        </div>
+        <div class="billing-row">
+          <label for="social-reason">NOMBRE/RAZÓN SOCIAL:</label>
+          <input
+            type="text"
+            id="social-reason"
+            name="social_reason"
+            value="EFFICIENCY + SA DE CV"
+            disabled
+          />
+        </div>
+        <div class="billing-row">
+          <label for="address">DIRECCIÓN:</label>
+          <input type="text" id="address" name="address" value="" disabled />
+        </div>
+        <!-- ... Más filas de datos ... -->
+      </div>
+      <div class="billing-methods">
+        <label>MÉTODO DE PAGO:</label>
+        <div class="methods">
+          <label>
+            <input type="checkbox" name="payment_method" value="tdc" disabled />
+            TDC
+          </label>
+          <label>
+            <input type="checkbox" name="payment_method" value="tdd" disabled />
+            TDD
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              name="payment_method"
+              value="electronic_transfer"
+              disabled
+            />
+            TRANSFERENCIA ELECTRÓNICA
+          </label>
+          <!-- ... Más métodos ... -->
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

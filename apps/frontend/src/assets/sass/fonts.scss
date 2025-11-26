@@ -1,0 +1,253 @@
+.subtitle-dark {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 800;
+  font-size: $text-28; 
+  line-height: 33px;
+
+  color: $primary;
+}
+
+.title {
+  font-size: $text-60 !important;
+}
+
+.subtitle {
+  font-size: $text-25 !important;
+}
+
+.subtitle-light {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 800;
+  font-size: $text-28;
+  line-height: 33px;
+
+  color: #fff;
+}
+
+.text-light {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: $text-20;
+  line-height: 24px;
+
+  color: #8f8f8f;
+}
+
+.text-dark {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: $text-20;
+  line-height: 23px;
+
+  color: $primary;
+}
+
+.text-black {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: $text-20;
+  line-height: 23px;
+
+  color: #4a4a4a;
+}
+
+p {
+  font-weight: 400;
+  font-size: $text-16;
+  line-height: 19px;
+
+  color: #000000;
+}
+
+.weigth {
+  font-weight: 600;
+}
+
+.p-blue {
+  font-weight: 400;
+  font-size: $text-18;
+  line-height: 19px;
+
+  color: #002541;
+}
+
+.p-blue-weigth {
+  font-weight: 700;
+  font-size: $text-18;
+  line-height: 19px;
+
+  color: #002541;
+}
+
+.subtitle-2-dark {
+  font-weight: 700;
+  font-size: $text-24;
+
+  color: #002541;
+}
+
+.plan-title {
+  font-weight: 500;
+  font-size: $text-20;
+
+  color: #9f9d9d;
+}
+
+.price-dark {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: $text-25;
+  line-height: 29.3px;
+
+  color: $primary;
+}
+
+
+.p-18-dark {
+  font-weight: 500 !important;
+  font-size: $text-18 !important;
+  line-height: 21px !important;
+  color: #002541 !important;
+}
+.p-18-black {
+  font-weight: 600;
+  font-size: $text-18;
+  line-height: 22px;
+  color: #000;
+}
+
+.text-16-gray {
+  font-weight: 400;
+  font-size: $text-16;
+  line-height: 19px;
+
+  color: #9f9d9d;
+}
+.text-12-gray {
+  font-weight: 500;
+  font-size: $text-12;
+  line-height: 15px;
+
+  color: #9f9d9d;
+}
+
+.price {
+  font-weight: 700;
+  font-size: $text-20;
+  line-height: 23px;
+
+  color: #5d73c7;
+}
+
+.description-total {
+  font-weight: 700;
+  font-size: $text-20;
+  line-height: 23px;
+
+  color: #727272;
+}
+
+.total {
+  font-weight: 700;
+  font-size: $text-20;
+  line-height: 23px;
+
+  color: #2c2c2c;
+}
+
+.price-from {
+  font-weight: 500;
+  font-size: $text-12;
+  line-height: 15px;
+  /* identical to box height */
+
+  color: #303030;
+}
+
+.price-from-value {
+  font-weight: 700;
+  font-size: $text-16;
+  line-height: 19px;
+
+  color: #002541;
+}
+
+.p-notification {
+  font-weight: 600;
+  font-size: $text-14;
+  line-height: 16px;
+
+  color: #32477c;
+}
+
+.p-notification-time {
+  font-weight: 600;
+  font-size: $text-12;
+  line-height: 14px;
+  /* identical to box height */
+
+  color: #555555;
+}
+
+.chat-message p {
+  color: #fff;
+}
+
+.chat-message p strong {
+  color: #fff;
+}
+
+.chat-message ol {
+  margin-left: 20px;
+}
+
+.chat-message ul {
+  margin-left: 20px;
+}
+
+@media (max-width: 767px) {
+  .chat-message p img {
+    color: #fff;
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+
+.size-194 {
+  font-size: $text-194 !important;
+}
+
+.size-45 {
+  font-size: $text-45 !important;
+}
+
+.size-28 {
+  font-size: $text-28 !important;
+}
+
+.size-25 {
+  font-size: $text-25 !important;
+}
+
+.size-20 {
+  font-size: $text-20 !important;
+}
+
+.size-18 {
+  font-size: $text-18 !important;
+}
+
+.size-16 {
+  font-size: $text-16 !important;
+}
+
+.video-presentation{
+  width: $text-930;
+  max-width: 90%;
+}

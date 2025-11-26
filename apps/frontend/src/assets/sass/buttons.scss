@@ -1,0 +1,71 @@
+.button-service {
+  background: #000000;
+  border-radius: 15px;
+  width: $text-216;
+  height: 43px;
+  padding: 7px;
+  padding-left: 10px;
+  padding-right: 20px;
+  margin-top: -20px;
+  margin-left: $text-6;
+  font-weight: 500;
+  font-size: $text-18;
+  line-height: 16px;
+  /* or 89% */
+
+  color: #ffffff;
+}
+
+.service-card{
+  width: $text-228;
+  height: $text-237;
+}
+
+.button-publish{
+  width: $text-350 !important;
+  height: $text-80 !important;
+  background: $primary;
+  border-radius: 15px !important;
+  /* or 89% */
+  font-weight: 500;
+  font-size: $text-25 !important;
+  line-height: 16px;
+  border: 0px;
+
+  color: #ffffff;
+}
+
+.button-secondary {
+  width: $text-350 !important;
+  height: $text-64 !important;
+  
+
+  background: $link;
+  border-radius: 15px !important;
+  /* or 89% */
+  font-weight: 500;
+  font-size: $text-25 !important;
+  line-height: 16px;
+  border: 0px;
+
+  color: #ffffff;
+}
+
+.button-ranking {
+    background: #fff;
+    border-radius: 15px;
+    width: $text-194;
+    height: 43px;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: -40px;
+    margin-left: 14px;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 16px;
+    /* or 89% */
+  
+    color: #000300;
+    ;
+  }

@@ -26,8 +26,8 @@ namespace Application.Features.ServiceFeatures.Commands
         public class FilterServicesCommandHandler : IRequestHandler<FilterServicesCommand, List<Service>>
         {
             private readonly IServiceRepository _context;
-            private readonly IAzureBlobService _contextStorage;
-            public FilterServicesCommandHandler(IServiceRepository context, IAzureBlobService contextStorage)
+            private readonly IAwsS3Service _contextStorage;
+            public FilterServicesCommandHandler(IServiceRepository context, IAwsS3Service contextStorage)
             {
                 _context = context;
                 _contextStorage = contextStorage;

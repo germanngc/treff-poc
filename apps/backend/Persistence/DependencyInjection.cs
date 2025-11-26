@@ -30,7 +30,9 @@ namespace Persistence
             services.AddTransient<IMessageRepository, MessageRepository>();
             services.AddTransient<INotificationRepository, NotificationRepository>();
             services.AddTransient<IMessageMailRepository, MessageMailRepository>();
-            services.AddTransient<IAzureBlobService, AzureBlobService>();
+            services.AddDefaultAWSOptions(configuration.GetAWSOptions());
+            services.AddAWSService<Amazon.S3.IAmazonS3>();
+            services.AddTransient<IAwsS3Service, AwsS3Service>();
             services.AddTransient<ITwilioService, TwilioService>();
         }
     }

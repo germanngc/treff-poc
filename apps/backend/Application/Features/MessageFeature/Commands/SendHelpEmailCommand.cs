@@ -22,9 +22,9 @@ namespace Application.Features.MessageFeature.Commands
         public class SendHelpEmailCommandHandler : IRequestHandler<SendHelpEmailCommand, bool>
         {
             private readonly IMessageMailRepository _messageRepository;
-            private readonly IAzureBlobService _azureBlobService;
+            private readonly IAwsS3Service _azureBlobService;
 
-            public SendHelpEmailCommandHandler(IMessageMailRepository messageRepository, IAzureBlobService azureBlobService)
+            public SendHelpEmailCommandHandler(IMessageMailRepository messageRepository, IAwsS3Service azureBlobService)
             {
                 _messageRepository = messageRepository;
                 _azureBlobService = azureBlobService;

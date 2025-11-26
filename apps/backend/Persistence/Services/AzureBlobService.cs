@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {
-    public class AzureBlobService : IAzureBlobService
+    public class AzureBlobService : IAwsS3Service
     {
         string _accessKey = string.Empty;
         private readonly AzureStorageConfig _storageConfig = null;

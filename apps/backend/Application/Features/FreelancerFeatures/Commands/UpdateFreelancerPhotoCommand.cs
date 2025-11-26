@@ -24,8 +24,8 @@ namespace Application.Features.FreelancerFeatures.Commands
         public class UpdateFreelancerPhotoCommandHandler : IRequestHandler<UpdateFreelancerPhotoCommand, Freelancer>
         {
             private readonly IFreelancerRepository _context;
-            private readonly IAzureBlobService _contextStorage;
-            public UpdateFreelancerPhotoCommandHandler(IFreelancerRepository context, IAzureBlobService contextStorage)
+            private readonly IAwsS3Service _contextStorage;
+            public UpdateFreelancerPhotoCommandHandler(IFreelancerRepository context, IAwsS3Service contextStorage)
             {
                 _context = context;
                 _contextStorage = contextStorage;

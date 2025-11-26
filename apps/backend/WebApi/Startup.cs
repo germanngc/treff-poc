@@ -68,7 +68,7 @@ namespace WebApi
             warnings.Ignore(CoreEventId.NavigationBaseIncludeIgnored));
             },
                 ServiceLifetime.Transient);
-            services.Configure<AzureStorageConfig>(opts => Configuration.GetSection("AzureStorageConfig").Bind(opts));
+            services.Configure<Persistence.Services.AwsS3Config>(opts => Configuration.GetSection("AWS").Bind(opts));
             services.Configure<TwilioConfig>(opts => Configuration.GetSection("TwilioConfig").Bind(opts));
             #region Swagger
             //services.AddEndpointsApiExplorer();

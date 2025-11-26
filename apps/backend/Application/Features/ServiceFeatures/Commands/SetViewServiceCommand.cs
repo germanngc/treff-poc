@@ -20,8 +20,8 @@ namespace Application.Features.ServiceFeatures.Commands
         public class SetViewServiceCommandHandler : IRequestHandler<SetViewServiceCommand, int>
         {
             private readonly IServiceRepository _context;
-            private readonly IAzureBlobService _contextStorage;
-            public SetViewServiceCommandHandler(IServiceRepository context, IAzureBlobService contextStorage)
+            private readonly IAwsS3Service _contextStorage;
+            public SetViewServiceCommandHandler(IServiceRepository context, IAwsS3Service contextStorage)
             {
                 _context = context;
                 _contextStorage = contextStorage;

@@ -38,8 +38,8 @@ namespace Application.Features.ServiceFeatures.Commands
         public class EditServiceCommandHandler : IRequestHandler<EditServiceCommand, int>
         {
             private readonly IServiceRepository _context;
-            private readonly IAzureBlobService _contextStorage;
-            public EditServiceCommandHandler(IServiceRepository context, IAzureBlobService contextStorage)
+            private readonly IAwsS3Service _contextStorage;
+            public EditServiceCommandHandler(IServiceRepository context, IAwsS3Service contextStorage)
             {
                 _context = context;
                 _contextStorage = contextStorage;

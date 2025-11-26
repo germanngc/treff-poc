@@ -18,6 +18,9 @@ export interface TreffInfrastructureStackProps extends cdk.StackProps {
   domainName?: string;
   frontendBucketName?: string;
   assetsBucketName?: string;
+  twilioAccountSid?: string;
+  twilioAuthToken?: string;
+  twilioPhone?: string;
 }
 
 export class TreffInfrastructureStack extends cdk.Stack {
@@ -197,6 +200,9 @@ export class TreffInfrastructureStack extends cdk.Stack {
       'Environment=ASPNETCORE_ENVIRONMENT=Production',
       'Environment=DOTNET_ROOT=/root/.dotnet',
       'Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.dotnet:/root/.dotnet/tools',
+      ...(props.twilioAccountSid ? [`Environment=TwilioConfig__AccountSid=${props.twilioAccountSid}`] : []),
+      ...(props.twilioAuthToken ? [`Environment=TwilioConfig__AuthToken=${props.twilioAuthToken}`] : []),
+      ...(props.twilioPhone ? [`Environment=TwilioConfig__Phone=${props.twilioPhone}`] : []),
       '',
       '[Install]',
       'WantedBy=multi-user.target',

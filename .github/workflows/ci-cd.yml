@@ -257,15 +257,18 @@ jobs:
         MYSQL_ROOT_PASS: ${{ secrets.MYSQL_ROOT_PASSWORD }}
         MYSQL_USER_PASS: ${{ secrets.MYSQL_PASSWORD }}
       run: |
-        # Base64 encode the password to safely pass it through SSM
-        MYSQL_PASS_B64=$(echo -n "$MYSQL_ROOT_PASS" | base64)
+        # Base64 encode passwords to safely pass them through SSM
+        MYSQL_ROOT_PASS_B64=$(echo -n "$MYSQL_ROOT_PASS" | base64)
+        MYSQL_USER_PASS_B64=$(echo -n "$MYSQL_USER_PASS" | base64)
         
         COMMAND_ID=$(aws ssm send-command \
           --instance-ids ${{ steps.get-instance.outputs.instance_id }} \
           --document-name "AWS-RunShellScript" \
           --parameters "commands=[
-            \"export MYSQL_PASS_B64='$MYSQL_PASS_B64'\",
-            \"export MYSQL_ROOT_PASSWORD=\\\`echo \\\$MYSQL_PASS_B64 | base64 -d\\\`\",
+            \"export MYSQL_ROOT_PASS_B64='$MYSQL_ROOT_PASS_B64'\",
+            \"export MYSQL_USER_PASS_B64='$MYSQL_USER_PASS_B64'\",
+            \"export MYSQL_ROOT_PASSWORD=\\\`echo \\\$MYSQL_ROOT_PASS_B64 | base64 -d\\\`\",
+            \"export MYSQL_USER_PASSWORD=\\\`echo \\\$MYSQL_USER_PASS_B64 | base64 -d\\\`\",
             \"echo Checking MySQL installation...\",
             \"if ! command -v mysql &> /dev/null; then\",
             \"  echo Installing MySQL...\",
@@ -300,9 +303,9 @@ jobs:
             \"  sleep 2\",
             \"done\",
             \"echo Setting up database and user...\",
-            \"sudo mysql <<'EOSQL'\",
+            \"sudo mysql <<EOSQL\",
             \"CREATE DATABASE IF NOT EXISTS treff_v2;\",
-            \"CREATE USER IF NOT EXISTS 'treff_user'@'localhost' IDENTIFIED BY '\\$MYSQL_ROOT_PASSWORD';\",
+            \"CREATE USER IF NOT EXISTS 'treff_user'@'localhost' IDENTIFIED BY '\\$MYSQL_USER_PASSWORD';\",
             \"GRANT ALL PRIVILEGES ON treff_v2.* TO 'treff_user'@'localhost';\",
             \"FLUSH PRIVILEGES;\",
             \"EOSQL\",
@@ -318,7 +321,7 @@ jobs:
             \"  rm /tmp/dotnet-install.sh\",
             \"fi\",
             \"echo Updating systemd service...\",
-            \"cat > /tmp/treff-backend.service <<'SERVICEEOF'\",
+            \"cat > /tmp/treff-backend.service <<SERVICEEOF\",
             \"[Unit]\",
             \"Description=Treff .NET Backend\",
             \"After=network.target mysql.service\",
@@ -335,8 +338,8 @@ jobs:
             \"Environment=ASPNETCORE_ENVIRONMENT=Production\",
             \"Environment=DOTNET_ROOT=/opt/dotnet\",
             \"Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/dotnet\",
+            \"Environment=ConnectionStrings__DefaultConnection=Server=localhost;Database=treff_v2;Uid=treff_user;Pwd=\\$MYSQL_USER_PASSWORD;\",
             \"SERVICEEOF\",
-            \"echo \\\"Environment=ConnectionStrings__DefaultConnection=Server=localhost;Database=treff_v2;Uid=treff_user;Pwd=\\$MYSQL_ROOT_PASSWORD;\\\" >> /tmp/treff-backend.service\",
             \"cat >> /tmp/treff-backend.service <<'SERVICEEOF2'\",
             \"TimeoutStartSec=30\",
             \"\",

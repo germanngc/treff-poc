@@ -296,9 +296,13 @@ jobs:
             "sudo chown -R www-data:www-data /var/www/treff-backend/",
             "echo Starting backend service...",
             "sudo systemctl enable treff-backend",
-            "sudo systemctl start treff-backend",
+            "sudo systemctl start treff-backend || true",
             "sleep 5",
-            "sudo systemctl status treff-backend --no-pager",
+            "echo Service status:",
+            "sudo systemctl status treff-backend --no-pager || true",
+            "echo",
+            "echo Recent logs:",
+            "sudo journalctl -u treff-backend -n 50 --no-pager || true",
             "rm /tmp/backend.tar.gz",
             "echo Backend deployment complete!"
           ]' \

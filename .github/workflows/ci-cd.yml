@@ -270,6 +270,7 @@ jobs:
             "fi",
             "echo Stopping any running MySQL processes...",
             "sudo systemctl stop mysql || true",
+            "sleep 2",
             "sudo pkill -9 mysqld || true",
             "sleep 2",
             "echo Cleaning up MySQL lock files...",

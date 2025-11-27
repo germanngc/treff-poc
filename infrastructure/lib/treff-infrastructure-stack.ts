@@ -338,7 +338,7 @@ export class TreffInfrastructureStack extends cdk.Stack {
       },
       additionalBehaviors: {
         '/api/*': {
-          origin: new origins.HttpOrigin(`${eip.ref}`, {
+          origin: new origins.HttpOrigin(ec2Instance.instancePublicDnsName, {
             protocolPolicy: cloudfront.OriginProtocolPolicy.HTTP_ONLY,
             httpPort: 80,
           }),

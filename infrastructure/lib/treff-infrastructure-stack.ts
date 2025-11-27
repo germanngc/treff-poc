@@ -88,6 +88,12 @@ export class TreffInfrastructureStack extends cdk.Stack {
       ],
     });
 
+    // Grant S3 access for deployments (if deployment bucket exists)
+    if (props.assetsBucketName) {
+      const deploymentBucket = s3.Bucket.fromBucketName(this, 'DeploymentBucket', 'treff-deployments-prod');
+      deploymentBucket.grantRead(ec2Role);
+    }
+
     // User data script
     const userDataScript = ec2.UserData.forLinux();
     userDataScript.addCommands(

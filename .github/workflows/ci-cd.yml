@@ -253,12 +253,22 @@ jobs:
         aws s3 cp backend.tar.gz s3://${{ vars.DEPLOYMENT_BUCKET_NAME }}/backend.tar.gz
     
     - name: Deploy Backend to EC2 via SSM
+      env:
+        MYSQL_ROOT_PASS: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+        MYSQL_USER_PASS: ${{ secrets.MYSQL_PASSWORD }}
       run: |
         COMMAND_ID=$(aws ssm send-command \
           --instance-ids ${{ steps.get-instance.outputs.instance_id }} \
           --document-name "AWS-RunShellScript" \
           --parameters 'commands=[
             "set -e",
+            "echo Setting up MySQL database...",
+            "sudo mysql <<EOSQL",
+            "CREATE DATABASE IF NOT EXISTS treff_v2;",
+            "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '${{ secrets.MYSQL_ROOT_PASSWORD }}';",
+            "FLUSH PRIVILEGES;",
+            "EOSQL",
+            "echo MySQL database configured",
             "echo Installing .NET runtime if not present...",
             "if [ ! -f /opt/dotnet/dotnet ]; then",
             "  sudo mkdir -p /opt/dotnet",
@@ -287,6 +297,7 @@ jobs:
             "Environment=ASPNETCORE_ENVIRONMENT=Production",
             "Environment=DOTNET_ROOT=/opt/dotnet",
             "Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/dotnet",
+            "Environment=ConnectionStrings__DefaultConnection=Server=localhost;Database=treff_v2;Uid=root;Pwd=${{ secrets.MYSQL_ROOT_PASSWORD }};",
             "TimeoutStartSec=30",
             "",
             "[Install]",

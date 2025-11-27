@@ -105,7 +105,7 @@ export class TreffInfrastructureStack extends cdk.Stack {
       'apt-get upgrade -y',
       '',
       '# Install dependencies',
-      'apt-get install -y wget curl git nginx mysql-server mysql-client unzip',
+      'apt-get install -y wget curl git nginx mysql-server mysql-client unzip awscli',
       '',
       '# ========================================',
       '# MySQL Setup',

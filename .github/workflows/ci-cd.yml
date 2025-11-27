@@ -265,7 +265,7 @@ jobs:
           --document-name "AWS-RunShellScript" \
           --parameters "commands=[
             \"MYSQL_PASS_B64='$MYSQL_PASS_B64'\",
-            \"MYSQL_ROOT_PASSWORD=\\$(echo \\$MYSQL_PASS_B64 | base64 -d)\",
+            \"MYSQL_ROOT_PASSWORD=\\\$(echo \\\"\\\$MYSQL_PASS_B64\\\" | base64 -d)\",
             \"echo Checking MySQL installation...\",
             \"if ! command -v mysql &> /dev/null; then\",
             \"  echo Installing MySQL...\",

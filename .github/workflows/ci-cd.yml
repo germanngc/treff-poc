@@ -140,14 +140,14 @@ jobs:
       id: cdk-deploy
       working-directory: ./infrastructure
       run: |
-        OUTPUT=$(npm run deploy -- --require-approval never 2>&1)
-        echo "$OUTPUT"
+        set -x  # Enable verbose output
+        npm run deploy -- --require-approval never --verbose 2>&1 | tee deploy.log
         
         # Extract outputs from CDK deployment
-        EC2_IP=$(echo "$OUTPUT" | grep -o 'EC2PublicIP = [0-9.]*' | cut -d' ' -f3)
-        CLOUDFRONT_URL=$(echo "$OUTPUT" | grep -o 'CloudFrontURL = https://[^[:space:]]*' | cut -d' ' -f3)
-        DISTRIBUTION_ID=$(echo "$OUTPUT" | grep -o 'CloudFrontDistributionId = [^[:space:]]*' | cut -d' ' -f3)
-        BACKEND_URL=$(echo "$OUTPUT" | grep -o 'BackendURL = http://[^[:space:]]*' | cut -d' ' -f3)
+        EC2_IP=$(grep -o 'EC2PublicIP = [0-9.]*' deploy.log | cut -d' ' -f3)
+        CLOUDFRONT_URL=$(grep -o 'CloudFrontURL = https://[^[:space:]]*' deploy.log | cut -d' ' -f3)
+        DISTRIBUTION_ID=$(grep -o 'CloudFrontDistributionId = [^[:space:]]*' deploy.log | cut -d' ' -f3)
+        BACKEND_URL=$(grep -o 'BackendURL = https://[^[:space:]]*' deploy.log | cut -d' ' -f3)
         
         echo "ec2_ip=$EC2_IP" >> $GITHUB_OUTPUT
         echo "cloudfront_url=$CLOUDFRONT_URL" >> $GITHUB_OUTPUT

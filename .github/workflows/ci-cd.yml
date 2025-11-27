@@ -345,7 +345,7 @@ jobs:
             \"Environment=DOTNET_ROOT=/opt/dotnet\",
             \"Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/dotnet\",
             \"SERVICEEOF\",
-            \"echo \\\"Environment=ConnectionStrings__DefaultConnection=Server=localhost;Database=treff_v2;Uid=root;Pwd=\\\$MYSQL_ROOT_PASSWORD;\\\" >> /tmp/treff-backend.service\",
+            \"echo \\\"Environment=ConnectionStrings__DefaultConnection=Server=localhost;Database=treff_v2;Uid=root;Pwd=\\$MYSQL_ROOT_PASSWORD;\\\" >> /tmp/treff-backend.service\",
             \"cat >> /tmp/treff-backend.service <<'SERVICEEOF2'\",
             \"TimeoutStartSec=30\",
             \"\",

@@ -24,7 +24,7 @@ namespace WebApi
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<ApplicationDbContext>();
+                    var context = services.GetRequiredService<treff_v2Context>();
                     context.Database.Migrate();
                 }
                 catch (Exception ex)

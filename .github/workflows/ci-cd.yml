@@ -259,6 +259,14 @@ jobs:
           --document-name "AWS-RunShellScript" \
           --parameters 'commands=[
             "set -e",
+            "echo Installing .NET runtime if not present...",
+            "if [ ! -f /root/.dotnet/dotnet ]; then",
+            "  wget https://dot.net/v1/dotnet-install.sh -O /tmp/dotnet-install.sh",
+            "  chmod +x /tmp/dotnet-install.sh",
+            "  /tmp/dotnet-install.sh --channel 9.0 --runtime aspnetcore --install-dir /root/.dotnet",
+            "  /tmp/dotnet-install.sh --channel 9.0 --runtime dotnet --install-dir /root/.dotnet",
+            "  rm /tmp/dotnet-install.sh",
+            "fi",
             "echo Creating systemd service if not exists...",
             "if [ ! -f /etc/systemd/system/treff-backend.service ]; then",
             "  sudo tee /etc/systemd/system/treff-backend.service > /dev/null <<EOF",

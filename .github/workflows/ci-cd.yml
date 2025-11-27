@@ -264,8 +264,8 @@ jobs:
           --instance-ids ${{ steps.get-instance.outputs.instance_id }} \
           --document-name "AWS-RunShellScript" \
           --parameters "commands=[
-            \"MYSQL_PASS_B64='$MYSQL_PASS_B64'\",
-            \"MYSQL_ROOT_PASSWORD=\\\$(echo \\\"\\\$MYSQL_PASS_B64\\\" | base64 -d)\",
+            \"export MYSQL_PASS_B64='$MYSQL_PASS_B64'\",
+            \"export MYSQL_ROOT_PASSWORD=\\\`echo \\\$MYSQL_PASS_B64 | base64 -d\\\`\",
             \"echo Checking MySQL installation...\",
             \"if ! command -v mysql &> /dev/null; then\",
             \"  echo Installing MySQL...\",

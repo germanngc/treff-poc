@@ -355,12 +355,31 @@ export class TreffInfrastructureStack extends cdk.Stack {
     // ========================================
     // SSL Certificate for Custom Domains
     // ========================================
-    // Import the manually created certificate from us-east-1
-    const certificate = acm.Certificate.fromCertificateArn(
-      this,
-      'TreffCertificate',
-      'arn:aws:acm:us-east-1:090605004272:certificate/979f3a72-bd55-47b2-a292-8644fd961aa2'
-    );
+    // Lookup hosted zones for DNS validation
+    const hostedZoneMx = route53.HostedZone.fromLookup(this, 'TreffMxZone', {
+      domainName: 'treff.mx',
+    });
+
+    const hostedZoneComMx = route53.HostedZone.fromLookup(this, 'TreffComMxZone', {
+      domainName: 'treff.com.mx',
+    });
+
+    // Create certificate with automatic DNS validation
+    // CloudFront requires certificate in us-east-1, CDK handles cross-region automatically
+    const certificate = new acm.Certificate(this, 'TreffCertificate', {
+      domainName: 'treff.mx',
+      subjectAlternativeNames: [
+        'www.treff.mx',
+        'treff.com.mx',
+        'www.treff.com.mx',
+      ],
+      validation: acm.CertificateValidation.fromDnsMultiZone({
+        'treff.mx': hostedZoneMx,
+        'www.treff.mx': hostedZoneMx,
+        'treff.com.mx': hostedZoneComMx,
+        'www.treff.com.mx': hostedZoneComMx,
+      }),
+    });
 
     // CloudFront Distribution
     const distribution = new cloudfront.Distribution(this, 'TreffDistribution', {
@@ -406,15 +425,6 @@ export class TreffInfrastructureStack extends cdk.Stack {
     // ========================================
     // Route53 DNS Records
     // ========================================
-    // Lookup hosted zones
-    const hostedZoneMx = route53.HostedZone.fromLookup(this, 'TreffMxZone', {
-      domainName: 'treff.mx',
-    });
-
-    const hostedZoneComMx = route53.HostedZone.fromLookup(this, 'TreffComMxZone', {
-      domainName: 'treff.com.mx',
-    });
-
     // A records for treff.mx
     new route53.ARecord(this, 'TreffMxARecord', {
       zone: hostedZoneMx,
@@ -504,7 +514,7 @@ export class TreffInfrastructureStack extends cdk.Stack {
 
     new cdk.CfnOutput(this, 'CertificateArn', {
       value: certificate.certificateArn,
-      description: 'ACM Certificate ARN',
+      description: 'ACM Certificate ARN (auto-validated via DNS)',
     });
   }
 }

@@ -40,8 +40,7 @@ namespace Persistence.Services
                             BucketName = _s3Config.S3.AssetsBucketName,
                             Key = fileName,
                             InputStream = fileStream,
-                            ContentType = contentType,
-                            CannedACL = S3CannedACL.PublicRead // Make images publicly accessible
+                            ContentType = contentType
                         };
 
                         await _s3Client.PutObjectAsync(putRequest);
@@ -79,8 +78,7 @@ namespace Persistence.Services
                             BucketName = _s3Config.S3.AssetsBucketName,
                             Key = fileName,
                             InputStream = fileStream,
-                            ContentType = contentType,
-                            CannedACL = S3CannedACL.PublicRead
+                            ContentType = contentType
                         };
 
                         await _s3Client.PutObjectAsync(putRequest);

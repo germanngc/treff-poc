@@ -46,7 +46,8 @@ namespace Persistence.Services
                         await _s3Client.PutObjectAsync(putRequest);
                     }
 
-                    return fileName;
+                    // Return full S3 URL
+                    return $"https://{_s3Config.S3.AssetsBucketName}.s3.{_s3Config.Region}.amazonaws.com/{fileName}";
                 }
                 catch (Exception ex)
                 {
@@ -84,7 +85,8 @@ namespace Persistence.Services
                         await _s3Client.PutObjectAsync(putRequest);
                     }
 
-                    return fileName;
+                    // Return full S3 URL
+                    return $"https://{_s3Config.S3.AssetsBucketName}.s3.{_s3Config.Region}.amazonaws.com/{fileName}";
                 }
                 catch (Exception ex)
                 {

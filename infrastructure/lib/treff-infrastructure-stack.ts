@@ -5,6 +5,9 @@ import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
+import * as route53 from 'aws-cdk-lib/aws-route53';
+import * as route53targets from 'aws-cdk-lib/aws-route53-targets';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import { Construct } from 'constructs';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -349,8 +352,20 @@ export class TreffInfrastructureStack extends cdk.Stack {
       frontendBucket.grantRead(oai);
     }
 
+    // ========================================
+    // SSL Certificate for Custom Domains
+    // ========================================
+    // Import the manually created certificate from us-east-1
+    const certificate = acm.Certificate.fromCertificateArn(
+      this,
+      'TreffCertificate',
+      'arn:aws:acm:us-east-1:090605004272:certificate/979f3a72-bd55-47b2-a292-8644fd961aa2'
+    );
+
     // CloudFront Distribution
     const distribution = new cloudfront.Distribution(this, 'TreffDistribution', {
+      certificate: certificate,
+      domainNames: ['treff.mx', 'www.treff.mx', 'treff.com.mx', 'www.treff.com.mx'],
       defaultBehavior: {
         origin: new origins.S3Origin(frontendBucket, {
           originAccessIdentity: oai,
@@ -386,6 +401,52 @@ export class TreffInfrastructureStack extends cdk.Stack {
         },
       ],
       priceClass: cloudfront.PriceClass.PRICE_CLASS_100, // Cheapest option
+    });
+
+    // ========================================
+    // Route53 DNS Records
+    // ========================================
+    // Lookup hosted zones
+    const hostedZoneMx = route53.HostedZone.fromLookup(this, 'TreffMxZone', {
+      domainName: 'treff.mx',
+    });
+
+    const hostedZoneComMx = route53.HostedZone.fromLookup(this, 'TreffComMxZone', {
+      domainName: 'treff.com.mx',
+    });
+
+    // A records for treff.mx
+    new route53.ARecord(this, 'TreffMxARecord', {
+      zone: hostedZoneMx,
+      recordName: 'treff.mx',
+      target: route53.RecordTarget.fromAlias(
+        new route53targets.CloudFrontTarget(distribution)
+      ),
+    });
+
+    new route53.ARecord(this, 'TreffMxWwwARecord', {
+      zone: hostedZoneMx,
+      recordName: 'www.treff.mx',
+      target: route53.RecordTarget.fromAlias(
+        new route53targets.CloudFrontTarget(distribution)
+      ),
+    });
+
+    // A records for treff.com.mx
+    new route53.ARecord(this, 'TreffComMxARecord', {
+      zone: hostedZoneComMx,
+      recordName: 'treff.com.mx',
+      target: route53.RecordTarget.fromAlias(
+        new route53targets.CloudFrontTarget(distribution)
+      ),
+    });
+
+    new route53.ARecord(this, 'TreffComMxWwwARecord', {
+      zone: hostedZoneComMx,
+      recordName: 'www.treff.com.mx',
+      target: route53.RecordTarget.fromAlias(
+        new route53targets.CloudFrontTarget(distribution)
+      ),
     });
 
     // ========================================
@@ -434,6 +495,16 @@ export class TreffInfrastructureStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'SSHCommand', {
       value: `ssh -i your-key.pem ubuntu@${eip.ref}`,
       description: 'SSH Command (you need to add a key pair)',
+    });
+
+    new cdk.CfnOutput(this, 'CustomDomains', {
+      value: 'https://treff.mx, https://www.treff.mx, https://treff.com.mx, https://www.treff.com.mx',
+      description: 'Custom domain URLs',
+    });
+
+    new cdk.CfnOutput(this, 'CertificateArn', {
+      value: certificate.certificateArn,
+      description: 'ACM Certificate ARN',
     });
   }
 }

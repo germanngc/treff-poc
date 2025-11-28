@@ -94,6 +94,22 @@ export class TreffInfrastructureStack extends cdk.Stack {
       deploymentBucket.grantRead(ec2Role);
     }
 
+    // Grant S3 access to assets bucket for uploads
+    // For imported buckets, we need to manually add the policy
+    ec2Role.addToPolicy(new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      actions: [
+        's3:PutObject',
+        's3:GetObject',
+        's3:DeleteObject',
+        's3:ListBucket',
+      ],
+      resources: [
+        'arn:aws:s3:::treff-assets-prod',
+        'arn:aws:s3:::treff-assets-prod/*',
+      ],
+    }));
+
     // User data script
     const userDataScript = ec2.UserData.forLinux();
     userDataScript.addCommands(

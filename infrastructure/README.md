@@ -94,19 +94,58 @@ export CDK_DEFAULT_REGION="us-east-2"
 
 ## Deployment
 
-### 1. Bootstrap CDK (first time only)
+### 1. Create Required S3 Buckets
+
+Before deploying the infrastructure, manually create the following S3 buckets:
+
+```bash
+# Create frontend bucket (adjust region as needed)
+aws s3 mb s3://treff-frontend-<YOUR_AWS_ACCOUNT_ID> --region us-east-2
+
+# Create assets bucket for user uploads
+aws s3 mb s3://treff-assets-prod --region us-east-2
+
+# Create deployments bucket (if using CI/CD)
+aws s3 mb s3://treff-deployments-prod --region us-east-2
+```
+
+**Configure the assets bucket for public read access:**
+
+```bash
+# Allow public policies (keep ACLs blocked)
+aws s3api put-public-access-block \
+  --bucket treff-assets-prod \
+  --public-access-block-configuration "BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=false,RestrictPublicBuckets=false" \
+  --region us-east-2
+
+# Add bucket policy for public read access
+aws s3api put-bucket-policy --bucket treff-assets-prod --policy '{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PublicReadGetObject",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::treff-assets-prod/*"
+    }
+  ]
+}' --region us-east-2
+```
+
+### 2. Bootstrap CDK (first time only)
 
 ```bash
 cdk bootstrap
 ```
 
-### 2. Review what will be created
+### 3. Review what will be created
 
 ```bash
 npm run synth
 ```
 
-### 3. Deploy infrastructure
+### 4. Deploy infrastructure
 
 ```bash
 npm run deploy
@@ -119,18 +158,24 @@ This will create:
   - .NET 8 runtime
   - MySQL 8.0
   - Nginx
-- S3 bucket for frontend
-- CloudFront distribution
+  - IAM role with S3 access permissions
+- CloudFront distribution (uses existing S3 frontend bucket)
 - Elastic IP for EC2
 - Security groups
 
-### 4. Note the outputs
+### 5. Note the outputs
 
 After deployment, save these outputs:
 - `EC2PublicIP`: Your backend server IP
-- `CloudFrontURL`: Your frontend URL
+- `EC2InstanceId`: EC2 instance identifier for SSM access
+- `CloudFrontURL`: Your frontend URL (e.g., https://d37tmm3aaqwvqg.cloudfront.net)
+- `CloudFrontDistributionId`: For cache invalidation
 - `MySQLConnectionString`: Database connection string
-- `FrontendBucket`: S3 bucket name
+- `FrontendBucket`: S3 bucket name for frontend deployments
+
+**Important**: The EC2 instance IAM role has permissions to:
+- Read from `treff-deployments-prod` bucket
+- Read/Write to `treff-assets-prod` bucket (for user uploads)
 
 ## Post-Deployment Steps
 

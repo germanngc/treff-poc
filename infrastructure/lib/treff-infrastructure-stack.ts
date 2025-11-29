@@ -364,22 +364,13 @@ export class TreffInfrastructureStack extends cdk.Stack {
       domainName: 'treff.com.mx',
     });
 
-    // Create certificate with automatic DNS validation
-    // CloudFront requires certificate in us-east-1, CDK handles cross-region automatically
-    const certificate = new acm.Certificate(this, 'TreffCertificate', {
-      domainName: 'treff.mx',
-      subjectAlternativeNames: [
-        'www.treff.mx',
-        'treff.com.mx',
-        'www.treff.com.mx',
-      ],
-      validation: acm.CertificateValidation.fromDnsMultiZone({
-        'treff.mx': hostedZoneMx,
-        'www.treff.mx': hostedZoneMx,
-        'treff.com.mx': hostedZoneComMx,
-        'www.treff.com.mx': hostedZoneComMx,
-      }),
-    });
+    // Import existing certificate from us-east-1 (CloudFront requirement)
+    // Manual certificate with DNS validation already configured
+    const certificate = acm.Certificate.fromCertificateArn(
+      this,
+      'TreffCertificate',
+      'arn:aws:acm:us-east-1:090605004272:certificate/979f3a72-bd55-47b2-a292-8644fd961aa2'
+    );
 
     // CloudFront Distribution
     const distribution = new cloudfront.Distribution(this, 'TreffDistribution', {
@@ -514,7 +505,7 @@ export class TreffInfrastructureStack extends cdk.Stack {
 
     new cdk.CfnOutput(this, 'CertificateArn', {
       value: certificate.certificateArn,
-      description: 'ACM Certificate ARN (auto-validated via DNS)',
+      description: 'ACM Certificate ARN (manual certificate in us-east-1)',
     });
   }
 }

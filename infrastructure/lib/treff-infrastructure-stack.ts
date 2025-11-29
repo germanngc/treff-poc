@@ -488,11 +488,6 @@ export class TreffInfrastructureStack extends cdk.Stack {
       description: 'CloudFront Distribution ID',
     });
 
-    new cdk.CfnOutput(this, 'MySQLConnectionString', {
-      value: `Server=${eip.ref};Database=${props.mysqlDatabase};Uid=${props.mysqlUser};Pwd=${props.mysqlPassword};`,
-      description: 'MySQL Connection String',
-    });
-
     new cdk.CfnOutput(this, 'SSHCommand', {
       value: `ssh -i your-key.pem ubuntu@${eip.ref}`,
       description: 'SSH Command (you need to add a key pair)',

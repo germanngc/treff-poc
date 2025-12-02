@@ -127,6 +127,146 @@ jobs:
       working-directory: ./infrastructure
       run: npm run build
     
+    - name: Ensure ACM Certificate Exists
+      id: check-cert
+      run: |
+        # Check if certificate already exists
+        CERT_ARN=$(aws acm list-certificates \
+          --region us-east-1 \
+          --query "CertificateSummaryList[?DomainName=='treff.mx'].CertificateArn" \
+          --output text | head -1)
+        
+        if [ -z "$CERT_ARN" ]; then
+          echo "Certificate not found, creating new one..."
+          
+          # Request certificate
+          CERT_ARN=$(aws acm request-certificate \
+            --domain-name treff.mx \
+            --subject-alternative-names www.treff.mx treff.com.mx www.treff.com.mx \
+            --validation-method DNS \
+            --region us-east-1 \
+            --query 'CertificateArn' \
+            --output text)
+          
+          echo "Certificate requested: $CERT_ARN"
+          
+          # Wait a moment for validation options to be ready
+          sleep 10
+          
+          # Get validation records
+          VALIDATION_RECORDS=$(aws acm describe-certificate \
+            --certificate-arn "$CERT_ARN" \
+            --region us-east-1 \
+            --query 'Certificate.DomainValidationOptions[*].ResourceRecord' \
+            --output json)
+          
+          echo "Validation records: $VALIDATION_RECORDS"
+          
+          # Extract validation records and add to Route53
+          # For treff.mx zone
+          MX_RECORDS=$(echo "$VALIDATION_RECORDS" | jq -r '.[] | select(.Name | contains("treff.mx")) | {Name, Value, Type}' | jq -s '.')
+          
+          if [ "$MX_RECORDS" != "[]" ]; then
+            MX_ZONE_ID=$(aws route53 list-hosted-zones-by-name \
+              --dns-name treff.mx \
+              --query 'HostedZones[0].Id' \
+              --output text | cut -d'/' -f3)
+            
+            echo "Adding validation records to treff.mx zone: $MX_ZONE_ID"
+            
+            for record in $(echo "$MX_RECORDS" | jq -r '.[] | @base64'); do
+              NAME=$(echo "$record" | base64 -d | jq -r '.Name')
+              VALUE=$(echo "$record" | base64 -d | jq -r '.Value')
+              
+              aws route53 change-resource-record-sets \
+                --hosted-zone-id "$MX_ZONE_ID" \
+                --change-batch "{
+                  \"Changes\": [{
+                    \"Action\": \"UPSERT\",
+                    \"ResourceRecordSet\": {
+                      \"Name\": \"$NAME\",
+                      \"Type\": \"CNAME\",
+                      \"TTL\": 300,
+                      \"ResourceRecords\": [{\"Value\": \"$VALUE\"}]
+                    }
+                  }]
+                }"
+            done
+          fi
+          
+          # For treff.com.mx zone
+          COMMX_RECORDS=$(echo "$VALIDATION_RECORDS" | jq -r '.[] | select(.Name | contains("treff.com.mx")) | {Name, Value, Type}' | jq -s '.')
+          
+          if [ "$COMMX_RECORDS" != "[]" ]; then
+            COMMX_ZONE_ID=$(aws route53 list-hosted-zones-by-name \
+              --dns-name treff.com.mx \
+              --query 'HostedZones[0].Id' \
+              --output text | cut -d'/' -f3)
+            
+            echo "Adding validation records to treff.com.mx zone: $COMMX_ZONE_ID"
+            
+            for record in $(echo "$COMMX_RECORDS" | jq -r '.[] | @base64'); do
+              NAME=$(echo "$record" | base64 -d | jq -r '.Name')
+              VALUE=$(echo "$record" | base64 -d | jq -r '.Value')
+              
+              aws route53 change-resource-record-sets \
+                --hosted-zone-id "$COMMX_ZONE_ID" \
+                --change-batch "{
+                  \"Changes\": [{
+                    \"Action\": \"UPSERT\",
+                    \"ResourceRecordSet\": {
+                      \"Name\": \"$NAME\",
+                      \"Type\": \"CNAME\",
+                      \"TTL\": 300,
+                      \"ResourceRecords\": [{\"Value\": \"$VALUE\"}]
+                    }
+                  }]
+                }"
+            done
+          fi
+          
+          echo "Waiting for certificate validation (this may take several minutes)..."
+          
+          # Wait for certificate to be validated (max 30 minutes)
+          for i in {1..180}; do
+            STATUS=$(aws acm describe-certificate \
+              --certificate-arn "$CERT_ARN" \
+              --region us-east-1 \
+              --query 'Certificate.Status' \
+              --output text)
+            
+            echo "Certificate status: $STATUS (check $i/180)"
+            
+            if [ "$STATUS" = "ISSUED" ]; then
+              echo "✅ Certificate validated successfully!"
+              break
+            elif [ "$STATUS" = "FAILED" ]; then
+              echo "❌ Certificate validation failed!"
+              exit 1
+            fi
+            
+            sleep 10
+          done
+        else
+          echo "Certificate already exists: $CERT_ARN"
+          
+          # Check if it's validated
+          STATUS=$(aws acm describe-certificate \
+            --certificate-arn "$CERT_ARN" \
+            --region us-east-1 \
+            --query 'Certificate.Status' \
+            --output text)
+          
+          echo "Certificate status: $STATUS"
+          
+          if [ "$STATUS" != "ISSUED" ]; then
+            echo "⚠️ Certificate exists but is not validated. Status: $STATUS"
+            echo "Manual intervention may be required."
+          fi
+        fi
+        
+        echo "certificate_arn=$CERT_ARN" >> $GITHUB_OUTPUT
+    
     - name: CDK Diff
       working-directory: ./infrastructure
       run: npm run diff

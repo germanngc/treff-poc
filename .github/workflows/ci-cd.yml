@@ -611,8 +611,9 @@ jobs:
       run: npm run build
       env:
         CI: false  # Don't treat warnings as errors
-        REACT_APP_API_URL: ${{ vars.BACKEND_API_URL }}
-        REACT_APP_SIGNALR_URL: ${{ vars.BACKEND_API_URL }}
+        # Use relative URLs - CloudFront serves both frontend and backend
+        # Frontend at treff.mx calls /api/* which CloudFront routes to backend
+        # This avoids CORS issues across multiple custom domains
     
     - name: Configure AWS credentials (OIDC)
       uses: aws-actions/configure-aws-credentials@v4

@@ -96,9 +96,21 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // Get allowed origins from configuration or use defaults
+            var allowedOrigins = Configuration.GetSection("CorsOrigins").Get<string[]>() ?? new[]
+            {
+                "http://localhost:3000",
+                "http://localhost:5000",
+                "http://localhost:5001",
+                "https://treff.mx",
+                "https://www.treff.mx",
+                "https://treff.com.mx",
+                "https://www.treff.com.mx"
+            };
+
             app.UseCors(options =>
             {
-                options.WithOrigins("http://localhost:3000", "http://localhost:5000", "http://localhost:5001", "https://maxvazquezg.github.io/", "https://maxvazquezg.github.io/treff-site");
+                options.WithOrigins(allowedOrigins);
                 options.AllowAnyMethod();
                 options.AllowAnyHeader();
                 options.AllowCredentials();
